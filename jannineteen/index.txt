@@ -1,0 +1,27 @@
+Topic: Ransom Note
+
+Given an arbitrary ransom note string and another string containing letters from all the magazines, write a function that will return true if the ransom note can be constructed from the magazines; otherwise, it will return false.
+
+Each letter in the magazine string can only be used once in your ransom note.
+
+Note: You may assume that both strings contain only lowercase letters.
+
+Example 1:
+Input: canConstruct("a", "b")
+Return Value: false
+
+Example 2:
+Input: canConstruct("aa", "ab")
+Return Value: false
+
+Example 3:
+Input: canConstruct("aa", "aab")
+Return Value: true
+
+Function Prototype in JS (you can do this in any language)
+
+function canConstruct(param_1, param_2)
+{
+
+}
+
