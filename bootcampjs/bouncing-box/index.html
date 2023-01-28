@@ -1,0 +1,23 @@
+<html style='background-color: black'>
+  <div id="my_bouncing_box" style= "background-color: blue; border-radius: 3px; position: absolute; left: 0px; top: 0px; min-width: 100px; min-height: 100px; text-align: center; font-weight: bold; color: #999;" >Felicia Ebikon</div>
+  <script type="text/javascript">
+    let box = document.getElementById("my_bouncing_box");
+    let x = 1;
+    let y = 1;
+    function my_Bouncing_Box(){
+        setInterval(function (){
+            box.style.top = box.offsetTop + y + "px";
+            box.style.left = box.offsetLeft + x + "px";
+            if (box.offsetLeft == 0 || box.offsetLeft + box.offsetWidth == window.innerWidth){
+                x = -x;
+            }
+            if (box.offsetTop == 0 || box.offsetTop + box.offsetHeight == window.innerHeight){
+                y = -y;
+            }
+            
+        }, 10);
+    }
+
+    my_Bouncing_Box();
+  </script>
+</html>
