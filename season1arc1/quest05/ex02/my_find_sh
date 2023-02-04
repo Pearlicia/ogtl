@@ -1,0 +1,19 @@
+Write a command line that searches for all file names that end with ".sh" (without quotation marks) in the current directory and all its sub-directories. It should display only the name of files without the extension .sh.
+
+Example 00
+
+$>./my_find_sh | cat -e
+file1$
+file2$
+file3$
+$>
+Tips
+You should dig into the command find (man find) specially the -exec option
+You should dig into the command basename
+You should dig into the command rev (man rev)
+You should dig into the command cut (man cut)
+You should dig into the command sed (man sed)
+
+
+find . -type f -name '*.sh' \
+    -exec sh -c 'for n; do basename "$n" .sh; done' sh {} +

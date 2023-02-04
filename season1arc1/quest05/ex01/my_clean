@@ -1,0 +1,29 @@
+In a file called my_clean place the command line that will search for all files - in the current directory as well as in its sub-directories - with a name ending by ~, or a name that start and end by #
+
+The command line will print and delete all files found.
+Only one command is allowed: no ; or && or other gitaneries.
+
+Example 00
+
+$>my_clean
+./.zshrc~
+...
+./blah/#tat#
+$>
+Tip
+You should dig into the command find (man find)
+
+
+
+find . \( -name "*~" -o -name "#*#" \)
+
+
+Explanation:
+
+find is the command used to search for files in the file system.
+. specifies the current directory as the starting point for the search.
+-name is used to search for files with a specific name pattern.
+"*~" matches files with a name ending with "~".
+"#*#" matches files with a name that starts and ends with "#".
+-o (or) is used to combine the two search conditions.
+The parentheses ( and ) are used to group the search conditions together.

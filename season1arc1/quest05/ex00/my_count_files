@@ -1,0 +1,18 @@
+<!-- Exercise: my_count_files
+
+Write a command line that counts and displays the number of regular files and directories in the current directory and all its sub-directories. It should include ".", the starting directory.
+
+Example 00
+Example of output:
+
+$>./my_count_files | cat -e
+13$
+$>
+Tips
+You should dig into the command ls (man ls)
+You should dig into the command wc (man wc) -->
+
+find . -type f -o -type d | wc -l
+
+
+<!-- This command uses find to search for all files (-type f) and directories (-type d) in the current directory and its sub-directories (.), and pipes (|) the results to wc to count the number of lines (-l) and display the final count. -->
