@@ -72,3 +72,7 @@ int main(int argc, char *argv[]) {
   printf("You failed to find the secret code. Better luck next time!\n");
   exit(EXIT_SUCCESS);
 }
+
+// This code uses the getopt function to parse the options -c and -t. If no code is specified, a random code 
+// is generated using the generate_code function. The player's guess is read from the standard input using
+//  the fgets function. If the input is not 4 characters long, it is considered
