@@ -59,3 +59,6 @@ my_square(1, 1);
 my_square(1, 5);
 my_square(4, 4);
 my_square(20, 20);
+my_square(2);
+my_square();
+my_square("", "");

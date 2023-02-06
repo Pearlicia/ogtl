@@ -34,6 +34,22 @@ o--o
 |  |
 o--o
 $>
+my_square(20,20) should display:
+$>./a.out 20 20
+o------------------o\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\n|                  |\no------------------o\n
+$>
+my_square("", "") should display:
+$>./a.out ""
+""
+$>
+my_square(2) should display:
+$>./a.out ""
+""
+$> 
+my_square(NULL) should display:
+$>./a.out ""
+""
+$>
 my_square(20, 20) should display:
 
 $>./a.out 20 20
@@ -73,10 +89,10 @@ int y = atoi(av[2]);
 
 3.
 Be careful segfault. :-)
-From docode you can download the qwasar_my_square by executing this command to compare your output with ours:
 
-curl -s https://storage.googleapis.com/qwasar-public/qwasar_my_square.tgz | tar zxvf - -C ./
-It works exactly like yours should be working:
+INCLUDE SEGFAULT
+INCLUDE NULL
+
 
 $>./qwasar_my_square 4 4
 o--o
