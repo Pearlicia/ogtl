@@ -1,84 +1,126 @@
-// This implementation uses va_start, va_arg, and va_end from stdarg.h to access the arguments passed to my_printf.
-//  The my_putchar function writes a single character to the standard output stream, my_putstr writes a string, 
-//  and my_putnbr_base writes a number in the specified base. The my_printf function parses the format string and 
-//  uses these functions to write the output.
-
-
 #include <stdarg.h>
 #include <unistd.h>
+#include <unistd.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+
+
+char buf[100];
+
+void itoabuf(unsigned int n, unsigned int base, char *buf, int *p)
+{   
+
+    int i = 0;
+    unsigned int num = n;
+
+
+    do
+    {
+        buf[i++] = "0123456789ABCDEF"[num % base];
+        num /= base;
+    } while (num != 0);
+
+    buf[i] = '\0';
+
+    for (int j = 0; j < i / 2; j++)
+    {
+        char tmp = buf[j];
+        buf[j] = buf[i - j - 1];
+        buf[i - j - 1] = tmp;
+    }
+
+    *p = i;
+}
 
 void my_putchar(char c)
 {
     write(1, &c, 1);
 }
 
-void my_putstr(char *str)
+int my_putstr(char *str)
 {
-    int i;
-
-    i = 0;
+    int i = 0;
     while (str[i])
         my_putchar(str[i++]);
+    return (i);
 }
 
-void my_putnbr_base(int nbr, char *base)
+int my_put_nbr(int nb)
 {
-    int len;
-
-    len = 0;
-    while (base[len])
-        len++;
-    if (nbr < 0)
+    int len = 0;
+    if (nb < 0)
     {
         my_putchar('-');
-        nbr = -nbr;
+        nb = -nb;
+        len++;
     }
-    if (nbr >= len)
-        my_putnbr_base(nbr / len, base);
-    my_putchar(base[nbr % len]);
+    if (nb >= 10)
+        len += my_put_nbr(nb / 10);
+    my_putchar(nb % 10 + 48);
+    len++;
+    return (len);
 }
 
-int my_printf(char *format, ...)
+int my_printf(const char *format, ...)
 {
     va_list args;
-    int i;
+    int i = 0, len = 0;
 
     va_start(args, format);
-    i = 0;
     while (format[i])
     {
         if (format[i] == '%')
         {
             i++;
+            int lent;
             switch (format[i])
             {
-                case 'c':
-                    my_putchar(va_arg(args, int));
-                    break;
-                case 's':
-                    my_putstr(va_arg(args, char *));
-                    break;
                 case 'd':
-                    my_putnbr_base(va_arg(args, int), "0123456789");
+                    len += my_put_nbr(va_arg(args, int));
                     break;
                 case 'o':
-                    my_putnbr_base(va_arg(args, int), "01234567");
+                    itoabuf(va_arg(args, unsigned int), 8, buf, &lent);
+                    write(1, buf, lent);
+                    len += lent;
                     break;
                 case 'u':
-                    my_putnbr_base(va_arg(args, int), "0123456789");
+                    itoabuf(va_arg(args, unsigned int), 10, buf, &lent);
+                    write(1, buf, lent);
+                    len += lent;
                     break;
                 case 'x':
-                    my_putnbr_base(va_arg(args, int), "0123456789abcdef");
+                    itoabuf(va_arg(args, unsigned int), 16, buf, &lent);
+                    write(1, buf, lent);
+                    len += lent;
+                    break;
+                case 's':
+                    len += my_putstr(va_arg(args, char *));
+                    break;
+                case 'c':
+                    my_putchar(va_arg(args, int));
+                    len++;
                     break;
                 case '%':
                     my_putchar('%');
+                    len++;
+                    break;
+                default:
+                    my_putchar('%');
+                    my_putchar(format[i]);
+                    write(1, &format[i], 1);
+                    len++;
+                    len += 2;
                     break;
             }
         }
         else
+        {
             my_putchar(format[i]);
+            len++;
+        }
         i++;
     }
     va_end(args);
-    return (0);
+    return (len);
 }
