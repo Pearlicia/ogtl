@@ -1,5 +1,33 @@
 #include <stdarg.h>
 #include <unistd.h>
+#include <unistd.h>
+#include <stdarg.h>
+#include <stdio.h>
+
+char buf[100];
+
+void itoabuf(unsigned int n, unsigned int base, char *buf, int *p)
+{
+    int i = 0;
+    unsigned int num = n;
+
+    do
+    {
+        buf[i++] = "0123456789abcdef"[num % base];
+        num /= base;
+    } while (num != 0);
+
+    buf[i] = '\0';
+
+    for (int j = 0; j < i / 2; j++)
+    {
+        char tmp = buf[j];
+        buf[j] = buf[i - j - 1];
+        buf[i - j - 1] = tmp;
+    }
+
+    *p = i;
+}
 
 void my_putchar(char c)
 {
@@ -34,16 +62,34 @@ int my_printf(const char *format, ...)
 {
     va_list args;
     int i = 0, len = 0;
+    // int written = 0;
+
     va_start(args, format);
     while (format[i])
     {
         if (format[i] == '%')
         {
             i++;
+            int lent;
             switch (format[i])
             {
                 case 'd':
                     len += my_put_nbr(va_arg(args, int));
+                    break;
+                case 'o':
+                    itoabuf(va_arg(args, unsigned int), 8, buf, &lent);
+                    write(1, buf, lent);
+                    len += lent;
+                    break;
+                case 'u':
+                    itoabuf(va_arg(args, unsigned int), 10, buf, &lent);
+                    write(1, buf, lent);
+                    len += lent;
+                    break;
+                case 'x':
+                    itoabuf(va_arg(args, unsigned int), 16, buf, &lent);
+                    write(1, buf, lent);
+                    len += lent;
                     break;
                 case 's':
                     len += my_putstr(va_arg(args, char *));
@@ -59,6 +105,8 @@ int my_printf(const char *format, ...)
                 default:
                     my_putchar('%');
                     my_putchar(format[i]);
+                    write(1, &format[i], 1);
+                    len++;
                     len += 2;
                     break;
             }
@@ -73,103 +121,3 @@ int my_printf(const char *format, ...)
     va_end(args);
     return (len);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// #include <unistd.h>
-// #include <stdarg.h>
-// #include <stdio.h>
-// #include <stdlib.h>
-
-// void    my_putchar(char c)
-// {
-//     write(1, &c, 1);
-// }
-
-// void    my_putstr(char *str)
-// {
-//     int i = 0;
-
-//     while (str[i])
-//         i++;
-//     write(1, str, i);
-// }
-
-// void    my_put_nbr(int n)
-// {
-//     if (n < 0)
-//     {
-//         my_putchar('-');
-//         n = -n;
-//     }
-//     if (n > 9)
-//         my_put_nbr(n / 10);
-//     my_putchar(n % 10 + '0');
-// }
-
-// int     my_printf(const char *fmt, ...)
-// {
-//     va_list ap;
-//     int i;
-
-//     i = 0;
-//     va_start(ap, fmt);
-//     while (fmt[i])
-//     {
-//         if (fmt[i] == '%')
-//         {
-//             i++;
-//             switch (fmt[i])
-//             {
-//                 case 'd':
-//                     my_put_nbr(va_arg(ap, int));
-//                     break;
-//                 case 's':
-//                     my_putstr(va_arg(ap, char*));
-//                     break;
-//                 case 'c':
-//                     my_putchar((char)va_arg(ap, int));
-//                     break;
-//                 case 'o':
-//                     my_putstr("0");
-//                     my_put_nbr(va_arg(ap, int));
-//                     break;
-//                 case 'u':
-//                     my_put_nbr(va_arg(ap, unsigned int));
-//                     break;
-//                 case 'x':
-//                     my_putstr("0x");
-//                     my_put_nbr(va_arg(ap, unsigned int));
-//                     break;
-//                 case 'p':
-//                     my_putstr("0x");
-//                     my_put_nbr((unsigned long)va_arg(ap, void*));
-//                     break;
-//                 default:
-//                     my_putchar(fmt[i]);
-//                     break;
-//             }
-//         }
-//         else
-//             my_putchar(fmt[i]);
-//         i++;
-//     }
-//     va_end(ap);
-//     return (0);
-// }
