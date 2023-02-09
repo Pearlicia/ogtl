@@ -124,3 +124,42 @@ int my_printf(const char *format, ...)
     va_end(args);
     return (len);
 }
+
+
+void write_hex(unsigned long n)
+{
+    static const char hex_digits[] = "0123456789abcdef";
+    char buf[sizeof(void *) * 2 + 1];
+    int i = sizeof(void *) * 2;
+    buf[i] = '\0';
+    while (n != 0) {
+        buf[--i] = hex_digits[n % 16];
+        n /= 16;
+    }
+    write(1, buf + i, sizeof(void *) * 2 - i);
+}
+
+void my_printf(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+
+    for (const char *p = format; *p; ++p) {
+        if (*p != '%') {
+            write(1, p, 1);
+            continue;
+        }
+
+        switch (*++p) {
+            case 'p': {
+                void *ptr = va_arg(args, void *);
+                write(1, "0x", 2);
+                write_hex((unsigned long)ptr);
+                break;
+            }
+            // Handle other conversion specifications ...
+        }
+    }
+
+    va_end(args);
+}
