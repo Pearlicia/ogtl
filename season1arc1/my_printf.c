@@ -124,9 +124,14 @@ int my_printf(const char *format, ...)
                     write_hex((unsigned long)ptr, &len);
                     break;
                 }
-                case 's':
-                    len += my_putstr(va_arg(args, char *));
+                case 's': {
+                    const char *str = va_arg(args, const char *);
+                    if (str == NULL)
+                        str = "(null)";
+                    write(1, str, strlen(str));
+                    len += strlen(str);
                     break;
+                }
                 case 'c':
                     my_putchar(va_arg(args, int));
                     len++;
