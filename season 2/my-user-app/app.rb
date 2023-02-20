@@ -1,80 +1,223 @@
-require 'sqlite3'
-require 'json'
+# require 'sqlite3'
+# require 'json'
+# require 'sinatra'
+# require 'erb'
+# require 'webrick'
+
+# require './my_user_model.rb'
+
+# set('views', './views')
+
+# user_db = User.new('db.sql')
+
+# enable :sessions
+
+# before do
+#   if session[:user_id]
+#     @current_user = User.new.find(session[:user_id])
+#   end
+# end
+
+# get '/' do
+#   erb :index
+# end
+
+
+# get '/users' do
+#   users = user_db.all
+#   users.each { |user| user.delete('password') }
+#   json users
+#   erb :users
+# end
+
+# post '/users' do
+#     user_info = {
+#       firstname: params[:firstname],
+#       lastname: params[:lastname],
+#       age: params[:age],
+#       password: params[:password],
+#       email: params[:email]
+#     }
+#     user_id = user_db.create(user_info)
+#     created_user = user_db.find(user_id)
+#     created_user.delete('password')
+#     json created_user
+# end
+
+
+# post '/sign_in' do
+#   email = params[:email]
+#   password = params[:password]
+#   user = user_db.all.find { |u| u['email'] == email && u['password'] == password }
+#   if user
+#     session[:user_id] = user['id']
+#     user.delete('password')
+#     json user
+#   else
+#     halt 401, 'Invalid email or password'
+#   end
+# end
+
+# put '/users' do
+#   user_id = session[:user_id]
+#   attribute = params[:attribute]
+#   value = params[:value]
+#   user_db.update(user_id, attribute, value)
+#   updated_user = user_db.find(user_id)
+#   updated_user.delete('password')
+#   json updated_user
+# end
+
+# delete '/sign_out' do
+#   session.clear
+#   status 204
+# end
+
+# delete '/users' do
+#   user_id = session[:user_id]
+#   user_db.destroy(user_id)
+#   session.clear
+#   status 204
+# end
+
+
+
+# server = WEBrick::HTTPServer.new(
+#   :BindAddress => "0.0.0.0",
+#   :Port => 8080
+# )
+
+# # Define a handler to respond to incoming requests
+# server.mount_proc '/' do |req, res|
+#   res.body = "Hello, world!"
+# end
+
+# # Start the server
+# server.start
+
+# set :port, 8080
+# run Sinatra::Application
+
+
 require 'sinatra'
-require 'securerandom'
-require 'sinatra/cookies'
-require 'sinatra/json'
-require 'sinatra/reloader'
+require 'sqlite3'
+require_relative 'my_user_model'
+require 'json'
 
-require_relative 'my_user_model.rb'
-
-user_db = User.new('db.sql')
 
 enable :sessions
 
-before do
-  if session[:user_id]
-    @current_user = User.new.find(session[:user_id])
-  end
-end
+set :bind, '0.0.0.0'
+set :port, 8080
+set :public_folder, File.dirname(__FILE__) + '/views'
 
+# set the database file name and create the table if it doesn't exist
+DB_FILE = 'db.sql'
+db = SQLite3::Database.new(DB_FILE)
+db.execute('CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, age INTEGER, password TEXT, email TEXT)')
+
+# set the views directory
+set('views', './views')
+
+# GET route for /
 get '/' do
   erb :index
 end
 
-
+# GET route for /users
 get '/users' do
-  users = user_db.all
-  users.each { |user| user.delete('password') }
-  json users
+  User.all.to_json
 end
 
+# POST route for /users
 post '/users' do
-    user_info = {
-      firstname: params[:firstname],
-      lastname: params[:lastname],
-      age: params[:age],
-      password: params[:password],
-      email: params[:email]
-    }
-    user_id = user_db.create(user_info)
-    created_user = user_db.find(user_id)
-    created_user.delete('password')
-    json created_user
+  id = User.create(params).to_i
+  User.find(id).to_json
 end
 
-
+# POST route for /sign_in
 post '/sign_in' do
-  email = params[:email]
-  password = params[:password]
-  user = user_db.all.find { |u| u['email'] == email && u['password'] == password }
-  if user
-    session[:user_id] = user['id']
-    user.delete('password')
-    json user
-  else
-    halt 401, 'Invalid email or password'
-  end
+  user = User.authenticate(params['email'], params['password'])
+  session[:user_id] = user['id'] if user
+  user.to_json
 end
 
+# PUT route for /users
 put '/users' do
-  user_id = session[:user_id]
-  attribute = params[:attribute]
-  value = params[:value]
-  user_db.update(user_id, attribute, value)
-  updated_user = user_db.find(user_id)
-  updated_user.delete('password')
-  json updated_user
+  User.update(session[:user_id], 'password', params['password'])
+  User.find(session[:user_id]).to_json
 end
 
+# DELETE route for /sign_out
 delete '/sign_out' do
   session.clear
   status 204
 end
 
+# DELETE route for /users
 delete '/users' do
-  user_id = session[:user_id]
-  user_db.destroy(user_id)
+  User.destroy(session[:user_id])
   session.clear
   status 204
 end
+
+
+
+
+# new one
+require 'sinatra'
+require 'sinatra/reloader' if development?
+require 'json'
+require './my_user_model'
+
+enable :sessions
+
+# Initialize User class
+users = User.new
+
+get '/' do
+  erb :index
+end
+
+get '/users' do
+  users_data = users.all
+  users_data.to_json
+end
+
+post '/users' do
+  user_info = {
+    firstname: params[:firstname],
+    lastname: params[:lastname],
+    age: params[:age],
+    password: params[:password],
+    email: params[:email]
+  }
+  user_id = users.create(user_info)
+  user_info[:id] = user_id
+  user_info.delete(:password)
+  user_info.to_json
+end
+
+post '/sign_in' do
+  email = params[:email]
+  password = params[:password]
+
+  # Dummy authentication
+  user = users.all.find { |u| u[:email] == email && u[:password] == password }
+  if user
+    session[:user_id] = user[:id]
+    user.delete(:password)
+    user.to_json
+  else
+    halt 401
+  end
+end
+
+put '/users' do
+  authenticate!
+
+  user_id = session[:user_id]
+  attribute = 'password'
+  value = params[:new_password]
+  user = users.update(user_id, attribute, value)
+  user.delete(:password
