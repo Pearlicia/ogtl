@@ -123,14 +123,17 @@ set :public_folder, File.dirname(__FILE__) + '/views'
 set('views', './views')
 
 # GET route for /
+
 get '/' do
-  erb :index
+	@users = User.all
+	erb :index
 end
 
 # GET route for /users
 get '/users' do
   User.all.to_json
 end
+
 
 # POST route for /users
 post '/users' do
