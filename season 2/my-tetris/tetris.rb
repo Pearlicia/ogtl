@@ -113,3 +113,86 @@ class Game
 
   def draw_block(column, row, color)
     x = column * BLOCK_SIZE
+
+    y = row * BLOCK_SIZE
+    case color
+    when 1
+      draw_quad(x, y, YELLOW, x + BLOCK_SIZE, y, YELLOW, x, y + BLOCK_SIZE, YELLOW, x + BLOCK_SIZE, y + BLOCK_SIZE, YELLOW)
+    when 2
+      draw_quad(x, y, BLUE, x + BLOCK_SIZE, y, BLUE, x, y + BLOCK_SIZE, BLUE, x + BLOCK_SIZE, y + BLOCK_SIZE, BLUE)
+    when 3
+      draw_quad(x, y, GREEN, x + BLOCK_SIZE, y, GREEN, x, y + BLOCK_SIZE, GREEN, x + BLOCK_SIZE, y + BLOCK_SIZE, GREEN)
+    when 4
+      draw_quad(x, y, RED, x + BLOCK_SIZE, y, RED, x, y + BLOCK_SIZE, RED, x + BLOCK_SIZE, y + BLOCK_SIZE, RED)
+    when 5
+      draw_quad(x, y, GRAY, x + BLOCK_SIZE, y, GRAY, x, y + BLOCK_SIZE, GRAY, x + BLOCK_SIZE, y + BLOCK_SIZE, GRAY)
+    when 6
+      draw_quad(x, y, WHITE, x + BLOCK_SIZE, y, WHITE, x, y + BLOCK_SIZE, WHITE, x + BLOCK_SIZE, y + BLOCK_SIZE, WHITE)
+    when 7
+      draw_quad(x, y, BLACK, x + BLOCK_SIZE, y, BLACK, x, y + BLOCK_SIZE, BLACK, x + BLOCK_SIZE, y + BLOCK_SIZE, BLACK)
+    end
+  end
+
+  def place_current_shape_on_board
+    @current_shape.each_with_index do |row, row_index|
+      row.each_with_index do |cell, column_index|
+        if cell != 0
+          @board[@current_shape_row + row_index][@current_shape_column + column_index] = cell
+        end
+      end
+    end
+  end
+
+  def remove_completed_rows
+    full_rows = @board.each_index.select { |i| @board[i].all? { |cell| cell != 0 } }
+    full_rows.each do |i|
+      @board.delete_at(i)
+      @board.unshift(Array.new(COLUMNS, 0))
+    end
+    @score += full_rows.length
+  end
+
+  def board_collision(column_offset = 0, row_offset = 0, shape = @current_shape)
+    shape.each_with_index do |row, row_index|
+      row.each_with_index do |cell, column_index|
+        if cell != 0
+          row_position = @current_shape_row + row_index + row_offset
+          column_position = @current_shape_column + column_index + column_offset
+          if row_position >= ROWS || column_position < 0 || column_position >= COLUMNS || @board[row_position][column_position] != 0
+            return true
+          end
+        end
+      end
+    end
+    false
+  end
+end
+
+# Game window
+class GameWindow < Gosu::Window
+  def initialize
+    super(WINDOW_WIDTH, WINDOW_HEIGHT)
+    self.caption = "Tetris"
+    @game = Game.new
+  end
+
+  def update
+    @game.update
+  end
+
+  def draw
+    @game.draw
+  end
+
+  def button_down(id)
+    case id
+    when Gosu::KbLeft
+      @game.move_left
+    when Gosu::KbRight
+      @game.move_right
+    when Gosu::KbUp
+      @game.rotate
+    when Gosu::KbEscape
+      close
+    end
+
