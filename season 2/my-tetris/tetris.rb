@@ -196,3 +196,251 @@ class GameWindow < Gosu::Window
       close
     end
 
+
+Trying to complete 
+require 'gosu'
+
+# Constants
+BLOCK_SIZE = 30
+ROWS = 20
+COLUMNS = 10
+WINDOW_WIDTH = COLUMNS * BLOCK_SIZE
+WINDOW_HEIGHT = (ROWS + 1) * BLOCK_SIZE
+
+# Colors
+BLACK = Gosu::Color.new(0xff000000)
+WHITE = Gosu::Color.new(0xffffffff)
+GRAY = Gosu::Color.new(0xff808080)
+RED = Gosu::Color.new(0xffff0000)
+GREEN = Gosu::Color.new(0xff00ff00)
+BLUE = Gosu::Color.new(0xff0000ff)
+YELLOW = Gosu::Color.new(0xffffff00)
+
+# Game logic
+class Game
+  def initialize
+    @board = Array.new(ROWS) { Array.new(COLUMNS, 0) }
+    @score = 0
+    @current_shape = generate_new_shape
+    @current_shape_row = 0
+    @current_shape_column = (COLUMNS / 2) - 2
+    @ticks = 0
+    @game_over = false
+  end
+
+  def update
+    if @game_over
+      return
+    end
+
+    @ticks += 1
+    if @ticks % 60 == 0
+      move_down
+    end
+  end
+
+  def draw
+    draw_board
+    draw_current_shape
+    draw_score
+    if @game_over
+      draw_game_over_message
+    end
+  end
+
+  def move_left
+    if !board_collision(-1)
+      @current_shape_column -= 1
+    end
+  end
+
+  def move_right
+    if !board_collision(1)
+      @current_shape_column += 1
+    end
+  end
+
+  def move_down
+    if !board_collision(0, 1)
+      @current_shape_row += 1
+    else
+      place_current_shape_on_board
+      remove_completed_rows
+      if board_collision(0, 0, generate_new_shape)
+        @game_over = true
+      else
+        @current_shape = generate_new_shape
+        @current_shape_row = 0
+        @current_shape_column = (COLUMNS / 2) - 2
+      end
+    end
+  end
+
+  def rotate
+    rotated_shape = @current_shape.transpose.map(&:reverse)
+    if !board_collision(0, 0, rotated_shape)
+      @current_shape = rotated_shape
+    end
+  end
+
+  private
+
+  def generate_new_shape
+    shapes = [
+      [
+        [1, 1, 0],
+        [0, 1, 1],
+        [0, 0, 0]
+      ],
+      [
+        [2, 2],
+        [2, 2]
+      ],
+      [
+        [0, 3, 0],
+        [3, 3, 3],
+        [0, 0, 0]
+      ],
+      [
+        [4, 0, 0],
+        [4, 4, 4],
+        [0, 0, 0]
+      ],
+      [
+        [0, 0, 5],
+        [5, 5, 5],
+        [0, 0, 0]
+      ],
+      [
+        [0, 6, 6],
+        [6, 6, 0],
+        [0, 0, 0]
+      ],
+      [
+        [7, 7,
+
+
+
+
+
+require 'gosu'
+
+# Constants
+BLOCK_SIZE = 30
+ROWS = 20
+COLUMNS = 10
+WINDOW_WIDTH = COLUMNS * BLOCK_SIZE
+WINDOW_HEIGHT = (ROWS + 1) * BLOCK_SIZE
+
+# Colors
+BLACK = Gosu::Color.new(0xff000000)
+WHITE = Gosu::Color.new(0xffffffff)
+GRAY = Gosu::Color.new(0xff808080)
+RED = Gosu::Color.new(0xffff0000)
+GREEN = Gosu::Color.new(0xff00ff00)
+BLUE = Gosu::Color.new(0xff0000ff)
+YELLOW = Gosu::Color.new(0xffffff00)
+
+# Game logic
+class Game
+  def initialize
+    @board = Array.new(ROWS) { Array.new(COLUMNS, 0) }
+    @score = 0
+    @current_shape = generate_new_shape
+    @current_shape_row = 0
+    @current_shape_column = (COLUMNS / 2) - 2
+    @ticks = 0
+    @game_over = false
+  end
+
+  def update
+    if @game_over
+      return
+    end
+
+    @ticks += 1
+    if @ticks % 60 == 0
+      move_down
+    end
+  end
+
+  def draw
+    draw_board
+    draw_current_shape
+    draw_score
+    if @game_over
+      draw_game_over_message
+    end
+  end
+
+  def move_left
+    if !board_collision(-1)
+      @current_shape_column -= 1
+    end
+  end
+
+  def move_right
+    if !board_collision(1)
+      @current_shape_column += 1
+    end
+  end
+
+  def move_down
+    if !board_collision(0, 1)
+      @current_shape_row += 1
+    else
+      place_current_shape_on_board
+      remove_completed_rows
+      if board_collision(0, 0, generate_new_shape)
+        @game_over = true
+      else
+        @current_shape = generate_new_shape
+        @current_shape_row = 0
+        @current_shape_column = (COLUMNS / 2) - 2
+      end
+    end
+  end
+
+  def rotate
+    rotated_shape = @current_shape.transpose.map(&:reverse)
+    if !board_collision(0, 0, rotated_shape)
+      @current_shape = rotated_shape
+    end
+  end
+
+  private
+
+  def generate_new_shape
+    shapes = [
+      [
+        [1, 1, 0],
+        [0, 1, 1],
+        [0, 0, 0]
+      ],
+      [
+        [2, 2],
+        [2, 2]
+      ],
+      [
+        [0, 3, 0],
+        [3, 3, 3],
+        [0, 0, 0]
+      ],
+      [
+        [4, 0, 0],
+        [4, 4, 4],
+        [0, 0, 0]
+      ],
+      [
+        [0, 0, 5],
+        [5, 5, 5],
+        [0, 0, 0]
+      ],
+      [
+        [0, 6, 6],
+        [6, 6, 0],
+        [0, 0, 0]
+      ],
+      [
+        [7, 7, 0],
+        [0, 7, 7],
