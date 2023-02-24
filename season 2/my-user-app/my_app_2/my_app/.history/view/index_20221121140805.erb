@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <% @users.each do |user| %>
+ <li>
+   <a href="/user/<%= user.firstname %>"><%= user.lastname %></a>
+ </li>
+<% end %>
+
+    <h2>Add Post</h2>
+<form method="post" action="/post">
+	<label for="firstname">firstname: </label>
+   <input type="text" name="firstname">
+
+   <label for="lastname">lastname: </label>
+   <input type="text" name="lastname">
+
+     <label for="age">age: </label>
+   <input type="text" name="age">
+
+     <label for="password">password: </label>
+   <input type="text" name="password">
+   
+]  <label for="age">age: </label>
+   <input type="text" name="age">
+   <input type ="submit" value="create user">
+</form>
+
+</body>
+</html>

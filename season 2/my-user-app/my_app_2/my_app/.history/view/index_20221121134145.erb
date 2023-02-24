@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <% @users.each do |user| %>
+ <li>
+   <a href="/user/<%= user.id %>"><%= user.title %></a>
+ </li>
+<% end %>
+
+    <h2>Add Post</h2>
+<form method="post" action="/post">
+		<label for="title">Title: </label>
+   <input type="text" name="title">
+   <label for="body">Body: </label>
+   <input type="text" name="body">
+   <input type ="submit" value="Add Post">
+</form>
+
+</body>
+</html>

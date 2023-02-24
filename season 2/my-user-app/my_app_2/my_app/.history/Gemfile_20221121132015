@@ -1,0 +1,6 @@
+source "Ruby31-x64"
+gem 'sinatra'
+gem "activerecord"
+gem "sinatra-activerecord"
+gem "rake"
+gem "sqlite3"
