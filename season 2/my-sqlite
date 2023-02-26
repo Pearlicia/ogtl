@@ -1,0 +1,143 @@
+require 'csv'
+
+class MySqliteRequest
+  def initialize
+    @table_name = nil
+    @select_columns = []
+    @where_conditions = []
+    @join_table = nil
+    @join_column_a = nil
+    @join_column_b = nil
+    @order_column = nil
+    @order_direction = nil
+    @insert_data = nil
+    @update_table_name = nil
+    @update_data = nil
+    @delete = false
+  end
+
+  def from(table_name)
+    @table_name = table_name
+    self
+  end
+
+  def select(columns)
+    if columns.is_a?(Array)
+      @select_columns += columns
+    else
+      @select_columns << columns
+    end
+    self
+  end
+
+  def where(column, value)
+    @where_conditions << [column, value]
+    self
+  end
+
+  def join(column_a, table_b, column_b)
+    @join_table = table_b
+    @join_column_a = column_a
+    @join_column_b = column_b
+    self
+  end
+
+  def order(direction, column)
+    @order_direction = direction
+    @order_column = column
+    self
+  end
+
+  def insert(table_name)
+    @insert_data = {table: table_name, values: []}
+    self
+  end
+
+  def values(data)
+    @insert_data[:values] << data
+    self
+  end
+
+  def update(table_name)
+    @update_table_name = table_name
+    self
+  end
+
+  def set(data)
+    @update_data = data
+    self
+  end
+
+  def delete
+    @delete = true
+    self
+  end
+
+  def run
+    if @insert_data
+      insert_rows
+    elsif @update_data
+      update_rows
+    elsif @delete
+      delete_rows
+    else
+      select_rows
+    end
+  end
+
+  private
+
+  def select_rows
+    table = load_table(@table_name)
+    table = join_table(table) if @join_table
+    table = filter_table(table) unless @where_conditions.empty?
+    table = sort_table(table) if @order_column
+    select_table(table)
+  end
+
+  def join_table(table)
+    joined_table = load_table(@join_table)
+    joined_table.each do |joined_row|
+      matching_row = table.find { |row| row[@join_column_a] == joined_row[@join_column_b] }
+      matching_row.merge!(joined_row) if matching_row
+    end
+    table
+  end
+
+  def filter_table(table)
+    table.select do |row|
+      @where_conditions.all? do |condition|
+        row[condition[0]] == condition[1]
+      end
+    end
+  end
+
+  def sort_table(table)
+    table.sort_by do |row|
+      row[@order_column]
+    end.tap do |sorted_table|
+      sorted_table.reverse! if @order_direction == :desc
+    end
+  end
+
+  def select_table(table)
+    if @select_columns.empty?
+      table
+    else
+      table.map do |row|
+        row.select { |column, _value| @select_columns.include?(column) }
+      end
+    end
+  end
+
+  def insert_rows
+    table = load_table(@insert_data[:table])
+    @insert_data[:values].each do |row|
+      row['ID'] = next_id(table)
+      table << row
+    end
+    save_table(table, @insert_data[:table])
+  end
+
+  def update_rows
+    table =
