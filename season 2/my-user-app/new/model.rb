@@ -60,9 +60,10 @@ class User < Sinatra::Base
         @db.execute('DELETE FROM users WHERE id = ?', [user_id])
     end
 
-    #   def self.authenticate(email, password)
-    #     db = SQLite3::Database.new(DB_FILE)
-    #     db.results_as_hash = true
-    #     db.execute('SELECT * FROM users WHERE email = ? AND password = ?', [email, password]).first
-    #   end
+      def self.authenticate(email, password)
+        db = SQLite3::Database.new(DB_FILE)
+        db.results_as_hash = true
+        db.execute('SELECT * FROM users WHERE email = ? AND password = ?', [email, password]).first
+      end
     end
+    https://tc094e766-381f.docode.fi.qwasar.io/users

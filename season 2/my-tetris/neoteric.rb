@@ -352,11 +352,6 @@ if !board_collision(@current_shape_column + 1, @current_shape_row)
 end
 end
 
-def move_right
-if !board_collision(@current_shape_column + 1, @current_shape_row)
-@current_shape_column += 1
-end
-end
 
 def move_down
 if !board_collision(@current_shape_column, @current_shape_row + 1)
