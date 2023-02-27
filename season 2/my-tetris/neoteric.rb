@@ -119,21 +119,18 @@ class Game
       [
         [7, 7, 0],
         [0, 7, 7],
-        [
-
-
-[0, 0, 0]
-]
-]
-shapes.sample.map(&:clone)
-end
+        [0, 0, 0]
+      ]
+    ]
+    shapes.sample.map(&:clone)
+  end
 
 def draw_board
-@board.each_with_index do |row, row_index|
-row.each_with_index do |cell, column_index|
-draw_block(column_index, row_index, color_for_block(cell))
-end
-end
+  @board.each_with_index do |row, row_index|
+    row.each_with_index do |cell, column_index|
+      draw_block(column_index, row_index, color_for_block(cell))
+    end
+  end
 end
 
 def draw_current_shape
