@@ -1,4 +1,5 @@
-id,age,gender
-2,30,F
-1,20,M
-3,40,M
+id_student,name,lastname
+3,Slava,Kov
+1,Den,Cho
+2,Iva,Sak
+5,Aaa,AA
