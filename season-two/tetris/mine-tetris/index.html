@@ -9,27 +9,27 @@
   </head>
 
   <body>
-    <div class="game">
-      <canvas id="game" class="game-place"></canvas>
+    <div class="tetris">
+      <canvas id="tetris" class="tetris-game"></canvas>
     </div>
 
-    <div class="status">
+    <div class="container">
       <img id="logo" src="images/tetris-logo.png">
       <p></p>
-      <canvas id="next" class="next"></canvas>
-      <canvas id="hold" class="hold"></canvas>
-      <div class="gray">
+      <canvas id="tetriminos" class="tetriminos"></canvas>
+      <canvas id="freeze" class="freeze"></canvas>
+      <div class="score-box">
         <p>Score: <span id="score">0</span></p>
         <p>Level: <span id="level">0</span></p>
         <p>Lines: <span id="lines">0</span></p>
       </div>
-      <button class="play" onclick="play(this)">Play</button>
+      <button class="play" onclick="startTime(this)">Play</button>
 
-      <button class="music-button" data-playing="false" role="switch" aria-checked="false">Audio</button>
-      <span id="timer"></span>
+      <button class="play-sound" data-playing="false" role="switch" aria-checked="false">Sound</button>
+      <span id="counts"></span>
     </div>
 
-    <div class="controller">
+    <div class="arrows">
       <h3>CONTROLS:</h3>
       <div>
         <img src="images/up-arrow.png" alt="up arrow">
@@ -56,8 +56,8 @@
         <p>HARD DROP</p>
       </div>
       <div>
-        <img src="images/esckey.png" alt="esc key">
-        <p>END GAME</p>
+        <img src="images/esckey.png" class="esc-key" alt="esc key">
+        <p class="esc-key">END GAME</p>
       </div>
     </div>
 

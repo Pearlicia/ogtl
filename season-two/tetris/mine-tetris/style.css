@@ -73,22 +73,22 @@ button:not(:disabled):active {
 }
 
 
-#game {
+#tetris {
   margin-left: 3%;
   margin-top: 3%;
   margin-right: auto;
   display: flex;
 }
 
-.game {
+.tetris {
   float: left;
 }
 
-.status {
+.container {
   margin-left: 30%;
 }
 
-.status p {
+.container p {
   font-weight: bold;
 }
 
@@ -98,7 +98,7 @@ button:not(:disabled):active {
   justify-content: space-between;
 }
 
-.game-place {
+.tetris-game {
   border: 4px solid rgba(152, 133, 139, 0.85);
 }
 
@@ -108,42 +108,42 @@ button:not(:disabled):active {
   width: 45%;
 }
 
-#next {
+#tetriminos {
   margin-top: 2%;
   margin-right: 6%;
   margin-left: 1%;
 }
 
-.status .gray {
+.container .score-box {
   width: 40%;
   background-color: gray;
 }
 
-.controller {
+.arrows {
   width: 10%;
   margin-right: 20%;
   margin-top: -28%;
   float: right
 }
 
-.controller p {
+.arrows p {
   margin-top: 0px;
   font-weight: bold;
   margin-bottom: 30px;
 }
 
-.controller div {
+.arrows div {
   display: flex;
 }
 
-.controller img {
+.arrows img {
   margin-right: 20px;
   margin-bottom: 10px;
   height: 5%;
   width: 25%;
 }
 
-.controller .esc {
+.arrows .esc-key {
   margin-top: -10px;
 }
 

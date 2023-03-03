@@ -1,39 +1,39 @@
-class Place {
-  constructor(ctx, ctxNext, ctxHold) {
-    this.ctx = ctx;
-    this.ctxNext = ctxNext;
-    this.ctxHold = ctxHold;
-    this.init();
+class PlayField {
+  constructor(contxt, nextTetris, freezeTetris) {
+    this.contxt = contxt;
+    this.nextTetris = nextTetris;
+    this.freezeTetris = freezeTetris;
+    this.initialize();
   }
 
-  init() {
-    this.ctx.canvas.width = columns * blockSize;
-    this.ctx.canvas.height = rows * blockSize;
-    this.ctx.scale(blockSize, blockSize);
+  initialize() {
+    this.contxt.canvas.width = columns * blockSize;
+    this.contxt.canvas.height = rows * blockSize;
+    this.contxt.scale(blockSize, blockSize);
   }
 
-  clearHold() {
-    const { width, height } = this.ctxHold.canvas;
-    this.ctxHold.clearRect(0, 0, width, height);
-    this.ctxHold.piece = false;
+  removeFreeze() {
+    const { width, height } = this.freezeTetris.canvas;
+    this.freezeTetris.clearRect(0, 0, width, height);
+    this.freezeTetris.piece = false;
   }
 
-  reset() {
+  resetGame() {
     this.grid = this.getEmptyGrid();
-    this.clearHold();
-    this.piece = new Piece(this.ctx);
+    this.removeFreeze();
+    this.piece = new Piece(this.contxt);
     this.piece.setStartingPosition();
-    this.getNewPiece();
+    this.newTetris();
   }
 
-  getNewPiece() {
-    const { width, height } = this.ctxNext.canvas;
+  newTetris() {
+    const { width, height } = this.nextTetris.canvas;
     this.next = new Piece(this.ctxNext);
-    this.ctxNext.clearRect(0, 0, width, height);
-    this.next.draw();
+    this.nextTetris.clearRect(0, 0, width, height);
+    this.next.drawTetris();
   }
 
-  draw() {
+  drawTetris() {
     this.piece.draw();
     this.drawBoard();
   }

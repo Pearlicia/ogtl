@@ -1,15 +1,15 @@
-const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById('tetris');
+const contxt = canvas.getContext('2d');
 
-const canvasNext = document.getElementById('next');
+const canvasNext = document.getElementById('tetriminos');
 const ctxNext = canvasNext.getContext('2d');
 
-const canvasHold = document.getElementById('hold');
+const canvasHold = document.getElementById('freeze');
 const ctxHold = canvasHold.getContext('2d');
 
 
 const audioElement = document.querySelector('audio');
-const playButton = document.querySelector('.music-button');
+const playButton = document.querySelector('.play-sound');
 
 let playerStatus = {
   score: 0,
@@ -33,27 +33,26 @@ let player = new Proxy(playerStatus, {
 });
 
 moves = {
-  [keys.LEFT]:   (p) => ({ ...p, x: p.x - 1 }),
-  [keys.RIGHT]:  (p) => ({ ...p, x: p.x + 1 }),
-  [keys.DOWN]:   (p) => ({ ...p, y: p.y + 1 }),
-  [keys.SPACE]:  (p) => ({ ...p, y: p.y + 1 }),
-  [keys.UP]:     (p) => place.rotate(p, rotation.RIGHT),
-  [keys.Q]:      (p) => place.rotate(p, rotation.LEFT),
-  [keys.C]:      (p) => place.hold()
+  [keys.LEFT]:   (k) => ({ ...k, x: k.x - 1 }),
+  [keys.RIGHT]:  (k) => ({ ...k, x: k.x + 1 }),
+  [keys.DOWN]:   (k) => ({ ...k, y: k.y + 1 }),
+  [keys.SPACE]:  (k) => ({ ...k, y: k.y + 1 }),
+  [keys.UP]:     (k) => place.rotate(k, rotation.RIGHT),
+  [keys.Q]:      (k) => place.rotate(k, rotation.LEFT),
 };
 
-let place = new Place(ctx, ctxNext, ctxHold);
+let place = new Place(contxt, ctxNext, ctxHold);
 
 initSidePanel(ctxNext);
 initSidePanel(ctxHold);
 
-function initSidePanel(ctx) {
-  ctx.canvas.width = 4 * blockSize;
-  ctx.canvas.height = 4 * blockSize;
-  ctx.scale(blockSize, blockSize);
+function initSidePanel(contxt) {
+  contxt.canvas.width = 4 * blockSize;
+  contxt.canvas.height = 4 * blockSize;
+  contxt.scale(blockSize, blockSize);
 }
 
-function addEventListener() {
+function startPlay() {
   document.removeEventListener('keydown', handleKeyPress);
   document.addEventListener('keydown', handleKeyPress);
 }
@@ -70,16 +69,16 @@ function handleKeyPress(event) {
     gameOver();
   } else if (moves[event.keyCode]) {
     event.preventDefault();
-    let p = moves[event.keyCode](place.piece);
+    let k = moves[event.keyCode](place.piece);
     if (event.keyCode === keys.SPACE) {
-      while (place.valid(p)) {
+      while (place.valid(k)) {
         player.score += points.HARD_DROP;
-        place.piece.move(p);
-        p = moves[keys.DOWN](place.piece);
+        place.piece.move(k);
+        k = moves[keys.DOWN](place.piece);
       }
       place.piece.hardDrop();
-    } else if (place.valid(p)) {
-      place.piece.move(p);
+    } else if (place.valid(k)) {
+      place.piece.move(k);
       if (event.keyCode === keys.DOWN) {
         player.score += points.SOFT_DROP;
       }
@@ -100,8 +99,8 @@ let requestId = null;
 let time = null;
 
 function play() {
-  ctx.paused = false;
-  addEventListener();
+  contxt.paused = false;
+  startPlay();
 
   playButton.dataset.playing = 'true';
   audioElement.play();
@@ -125,7 +124,7 @@ function animate(now = 0) {
     }
   }
 
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  contxt.clearRect(0, 0, contxt.canvas.width, contxt.canvas.height);
 
   place.draw();
   requestId = requestAnimationFrame(animate);
@@ -134,58 +133,58 @@ function animate(now = 0) {
 function gameOver() {
   cancelAnimationFrame(requestId);
   requestId = null;
-  ctx.fillStyle = 'white';
-  ctx.fillRect(1, 3, 8, 1.2);
-  ctx.font = '1px Futura';
-  ctx.fillStyle = 'red';
-  ctx.fillText('GAME OVER', 1.8, 4);
+  contxt.fillStyle = 'white';
+  contxt.fillRect(1, 3, 8, 1.2);
+  contxt.font = '1px Futura';
+  contxt.fillStyle = 'red';
+  contxt.fillText('GAME OVER', 1.8, 4);
 }
 
 function pause() {
   if (!requestId) {
-    ctx.paused = true;
-    countdown();
+    contxt.paused = true;
+    startTime();
   }
 
   cancelAnimationFrame(requestId);
   requestId = null;
 
-  ctx.fillStyle = 'White';
-  ctx.fillRect(1, 3, 7, 1.2);
-  ctx.font = '1px Futura';
-  ctx.fillStyle = 'blue';
-  ctx.fillText('  PAUSE', 3, 4);
-  ctx.paused = true;
+  contxt.fillStyle = 'White';
+  contxt.fillRect(1, 3, 7, 1.2);
+  contxt.font = '1px Futura';
+  contxt.fillStyle = 'blue';
+  contxt.fillText('  PAUSE', 3, 4);
+  contxt.paused = true;
 }
 
-function countdown(e) {
+function startTime(e) {
   if (requestId) {
     audioElement.pause();
     pause();
   } else {
-    let isPaused = ctx.paused;
+    let isPaused = contxt.paused;
     if (!isPaused) {
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      contxt.clearRect(0, 0, contxt.canvas.width, contxt.canvas.height);
       audioElement.currentTime = 0;
     }
     let count = 3;
-    document.getElementById('timer').innerHTML = count;
-    let counter = setInterval(countdown, 1000);
-    function countdown() {
+    document.getElementById('counts').innerHTML = count;
+    let counter = setInterval(startTime, 1000);
+    function startTime() {
       count -= 1;
-      document.getElementById('timer').innerHTML = count;
+      document.getElementById('counts').innerHTML = count;
       if (count <= 0) {
         clearInterval(counter);
         if (!isPaused) {
           play();
         } else {
-          ctx.paused = false;
-          document.getElementById("timer").innerHTML = '';
+          contxt.paused = false;
+          document.getElementById("counts").innerHTML = '';
           audioElement.play();
           animate();
           return;
         }
-        document.getElementById("timer").innerHTML = '';
+        document.getElementById("counts").innerHTML = '';
         return;
       }
     }
