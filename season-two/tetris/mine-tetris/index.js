@@ -189,7 +189,7 @@ function game() {
   resetGame();
 
   if (result) {
-    haltMovingTetris(result);
+    cancelAnimationFrame(result);
   }
   moveTetris();
 }
@@ -209,11 +209,11 @@ function moveTetris(present = 0) {
   contxt.clearRect(0, 0, contxt.canvas.width, contxt.canvas.height);
 
   place.draw();
-  result = movingTetris(moveTetris);
+  result = requestAnimationFrame(moveTetris);
 }
 
 function endGame() {
-  haltMovingTetris(result);
+  cancelAnimationFrame(result);
   result = null;
   contxt.fillStyle = 'white';
   contxt.fillRect(1, 3, 8, 1.2);
@@ -228,7 +228,7 @@ function halt() {
     commence();
   }
 
-  haltMovingTetris(result);
+  cancelAnimationFrame(result);
   result = null;
 
   contxt.fillStyle = 'White';
