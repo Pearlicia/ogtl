@@ -1,11 +1,11 @@
 const canvas = document.getElementById('tetris');
 const contxt = canvas.getContext('2d');
 
-const canvasNext = document.getElementById('tetriminos');
-const ctxNext = canvasNext.getContext('2d');
+const followinCanvas = document.getElementById('tetriminos');
+const followinContxt = followinCanvas.getContext('2d');
 
-const canvasHold = document.getElementById('freeze');
-const ctxHold = canvasHold.getContext('2d');
+const haltCanvas = document.getElementById('halt');
+const haltContxt = haltCanvas.getContext('2d');
 
 
 const addTune = document.querySelector('audio');
@@ -123,10 +123,10 @@ moves = {
   [keys.Q]:      (k) => place.rotate(k, rotation.LEFT),
 };
 
-let place = new Place(contxt, ctxNext, ctxHold);
+let place = new Place(contxt, followinContxt, haltContxt);
 
-controlTetris(ctxNext);
-controlTetris(ctxHold);
+controlTetris(followinContxt);
+controlTetris(haltContxt);
 
 function controlTetris(contxt) {
   contxt.canvas.width = 4 * blockSize;

@@ -1,41 +1,41 @@
-class PlayField {
-  constructor(contxt, nextTetris, freezeTetris) {
+class GameArea {
+  constructor(contxt, followinTet, haltTet) {
     this.contxt = contxt;
-    this.nextTetris = nextTetris;
-    this.freezeTetris = freezeTetris;
-    this.initialize();
+    this.followinTet = followinTet;
+    this.haltTet = haltTet;
+    this.setUp();
   }
 
-  initialize() {
+  setUp() {
     this.contxt.canvas.width = columns * blockSize;
     this.contxt.canvas.height = rows * blockSize;
     this.contxt.scale(blockSize, blockSize);
   }
 
-  removeFreeze() {
-    const { width, height } = this.freezeTetris.canvas;
-    this.freezeTetris.clearRect(0, 0, width, height);
-    this.freezeTetris.piece = false;
+  deleteHalt() {
+    const { width, height } = this.haltTet.canvas;
+    this.haltTet.clearRect(0, 0, width, height);
+    this.haltTet.piece = false;
   }
 
-  resetGame() {
-    this.grid = this.getEmptyGrid();
-    this.removeFreeze();
+  startOver() {
+    this.grid = this.newGrid();
+    this.deleteHalt();
     this.piece = new Piece(this.contxt);
-    this.piece.setStartingPosition();
-    this.newTetris();
+    this.piece.beginGame();
+    this.newPlay();
   }
 
-  newTetris() {
-    const { width, height } = this.nextTetris.canvas;
-    this.next = new Piece(this.ctxNext);
-    this.nextTetris.clearRect(0, 0, width, height);
-    this.next.drawTetris();
+  newPlay() {
+    const { width, height } = this.followinTet.canvas;
+    this.followin = new Piece(this.followinContxt);
+    this.followinTet.clearRect(0, 0, width, height);
+    this.followin.drawPlay();
   }
 
-  drawTetris() {
+  drawPlay() {
     this.piece.draw();
-    this.drawBoard();
+    this.scoreTable();
   }
 
   drop() {
@@ -43,7 +43,7 @@ class PlayField {
     if (this.valid(p)) {
       this.piece.move(p);
     } else {
-      this.freeze();
+      this.constant();
       this.clearLines();
       if (this.piece.y === 0) {
         gameover.play();
@@ -52,7 +52,7 @@ class PlayField {
       fall.play();
       this.piece = this.next;
       this.piece.ctx = this.ctx;
-      this.piece.setStartingPosition();
+      this.piece.beginGame();
       this.getNewPiece();
     }
     return true;
@@ -96,7 +96,7 @@ class PlayField {
     });
   }
 
-  freeze() {
+  constant() {
     this.piece.shape.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value > 0) {
@@ -106,18 +106,18 @@ class PlayField {
     });
   }
 
-  drawBoard() {
+  scoreTable() {
     this.grid.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value > 0) {
-          this.ctx.fillStyle = colors[value];
-          this.ctx.fillRect(x, y, 1, 1);
+          this.contxt.fillStyle = colors[value];
+          this.contxt.fillRect(x, y, 1, 1);
         }
       });
     });
   }
 
-  getEmptyGrid() {
+  newGrid() {
     return Array.from({ length: rows }, () => Array(columns).fill(0));
   }
 
@@ -129,7 +129,7 @@ class PlayField {
     return this.grid[y] && this.grid[y][x] === 0;
   }
 
-  rotate(piece, direction) {
+  spintetris(piece, direction) {
     let p = JSON.parse(JSON.stringify(piece));
     if (!piece.hardDropped) {
       for (let y = 0; y < p.shape.length; y++)
@@ -158,7 +158,7 @@ class PlayField {
     }
     this.ctxHold.piece.ctx = this.ctxHold;
     this.piece.ctx = this.ctx;
-    this.piece.setStartingPosition();
+    this.piece.beginGame();
     this.hold = this.ctxHold.piece;
     const { width, height } = this.ctxHold.canvas;
     this.ctxHold.clearRect(0, 0, width, height);
