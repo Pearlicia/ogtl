@@ -1,11 +1,11 @@
-class Piece {
-  constructor(ctx) {
-    this.ctx = ctx;
+class Fragment {
+  constructor(contxt) {
+    this.contxt = contxt;
     this.spawn();
   }
 
-  spawn() {
-    this.typeId = this.randomizeTetromino(colors.length - 1);
+  generate() {
+    this.typeId = this.newTet(colors.length - 1);
     this.shape = shapes[this.typeId];
     this.color = colors[this.typeId];
     this.x = 0;
@@ -13,26 +13,26 @@ class Piece {
     this.hardDropped = false;
   }
 
-  draw() {
-    this.ctx.fillStyle = this.color;
+  sketch() {
+    this.contxt.fillStyle = this.color;
     this.shape.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value > 0) {
-          this.ctx.fillRect(this.x + x, this.y + y, 1, 1);
+          this.contxt.fillRect(this.x + x, this.y + y, 1, 1);
         }
       });
     });
   }
 
-  randomizeTetromino(noOfTypes) {
-    return Math.floor(Math.random() * noOfTypes + 1);
+  newTet(types) {
+    return Math.floor(Math.random() * types + 1);
   }
 
-  setStartingPosition() {
+  genesis() {
     this.x = this.typeId === 4 ? 4 : 3;
   }
 
-  move(p) {
+  advance(p) {
     if (!this.hardDropped) {
       this.x = p.x;
       this.y = p.y;

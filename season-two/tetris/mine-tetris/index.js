@@ -114,7 +114,7 @@ let player = new Proxy(playerStatus, {
   }
 });
 
-moves = {
+steps = {
   [keys.LEFT]:   (k) => ({ ...k, x: k.x - 1 }),
   [keys.RIGHT]:  (k) => ({ ...k, x: k.x + 1 }),
   [keys.DOWN]:   (k) => ({ ...k, y: k.y + 1 }),

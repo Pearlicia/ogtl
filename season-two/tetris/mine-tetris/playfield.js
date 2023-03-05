@@ -7,9 +7,9 @@ class GameArea {
   }
 
   setUp() {
-    this.contxt.canvas.width = columns * blockSize;
-    this.contxt.canvas.height = rows * blockSize;
-    this.contxt.scale(blockSize, blockSize);
+    this.contxt.canvas.width = columns * block;
+    this.contxt.canvas.height = rows * block;
+    this.contxt.scale(block, block);
   }
 
   deleteHalt() {
@@ -21,8 +21,8 @@ class GameArea {
   startOver() {
     this.grid = this.newGrid();
     this.deleteHalt();
-    this.piece = new Piece(this.contxt);
-    this.piece.beginGame();
+    this.fragment = new Fragment(this.contxt);
+    this.fragment.genesis();
     this.newPlay();
   }
 
@@ -30,35 +30,35 @@ class GameArea {
     const { width, height } = this.followinTet.canvas;
     this.followin = new Piece(this.followinContxt);
     this.followinTet.clearRect(0, 0, width, height);
-    this.followin.drawPlay();
+    this.followin.write();
   }
 
-  drawPlay() {
-    this.piece.draw();
+  write() {
+    this.fragment.sketch();
     this.scoreTable();
   }
 
-  drop() {
-    let p = moves[keys.DOWN](this.piece);
-    if (this.valid(p)) {
-      this.piece.move(p);
+  sink() {
+    let k = steps[keys.DOWN](this.fragment);
+    if (this.approved(p)) {
+      this.fragment.advance(p);
     } else {
       this.constant();
-      this.clearLines();
-      if (this.piece.y === 0) {
-        gameover.play();
+      this.setline();
+      if (this.fragment.y === 0) {
+        gameover.game();
         return false;
       }
-      fall.play();
-      this.piece = this.next;
-      this.piece.ctx = this.ctx;
-      this.piece.beginGame();
-      this.getNewPiece();
+      fall.game();
+      this.fragment = this.next;
+      this.fragment.contxt = this.contxt;
+      this.fragment.genesis();
+      this.newPlay();
     }
     return true;
   }
 
-  clearLines() {
+  setline() {
     let lines = 0;
 
     this.grid.forEach((row, y) => {
@@ -66,14 +66,13 @@ class GameArea {
         lines++;
 
         this.grid.splice(y, 1);
-        clear.play();
-        // Add zero filled row at the top.
+        clear.game();
         this.grid.unshift(Array(columns).fill(0));
       }
     });
 
     if (lines > 0) {
-      player.score += this.getLinesClearedPoints(lines);
+      player.score += this.getline(lines);
       player.lines += lines;
 
       if (player.lines >= linesLevel) {
@@ -84,23 +83,23 @@ class GameArea {
     }
   }
 
-  valid(p) {
-    return p.shape.every((row, dy) => {
-      return row.every((value, dx) => {
-        let x = p.x + dx;
-        let y = p.y + dy;
+  approved(k) {
+    return k.shape.every((row, sy) => {
+      return row.every((value, sx) => {
+        let x = k.x + sx;
+        let y = k.y + sy;
         return (
-          value === 0 || (this.isInsideWalls(x, y) && this.notOccupied(x, y))
+          value === 0 || (this.interior(x, y) && this.vacant(x, y))
         );
       });
     });
   }
 
   constant() {
-    this.piece.shape.forEach((row, y) => {
+    this.fragment.shape.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value > 0) {
-          this.grid[y + this.piece.y][x + this.piece.x] = value;
+          this.grid[y + this.fragment.y][x + this.fragment.x] = value;
         }
       });
     });
@@ -121,60 +120,60 @@ class GameArea {
     return Array.from({ length: rows }, () => Array(columns).fill(0));
   }
 
-  isInsideWalls(x, y) {
+  interior(x, y) {
     return x >= 0 && x < columns && y <= rows;
   }
 
-  notOccupied(x, y) {
+  vacant(x, y) {
     return this.grid[y] && this.grid[y][x] === 0;
   }
 
-  spintetris(piece, direction) {
-    let p = JSON.parse(JSON.stringify(piece));
-    if (!piece.hardDropped) {
-      for (let y = 0; y < p.shape.length; y++)
+  spintetris(fragment, move) {
+    let k = JSON.parse(JSON.stringify(fragment));
+    if (!fragment.hardDropped) {
+      for (let y = 0; y < k.shape.length; y++)
         for (let x = 0; x < y; x++)
-          [p.shape[x][y], p.shape[y][x]] = [p.shape[y][x], p.shape[x][y]];
-      if (direction === rotation.RIGHT) {
-        p.shape.forEach((row) => row.reverse());
+          [k.shape[x][y], k.shape[y][x]] = [k.shape[y][x], k.shape[x][y]];
+      if (move === rotation.RIGHT) {
+        k.shape.forEach((row) => row.reverse());
         rotate.play();
-      } else if (direction === rotation.LEFT) {
-        p.shape.reverse();
+      } else if (move === rotation.LEFT) {
+        k.shape.reverse();
         rotate.play();
       }
     }
-    return p;
+    return k;
   }
 
-  swapPieces() {
-    if (!this.ctxHold.piece) {
-      this.ctxHold.piece = this.piece;
-      this.piece = this.next;
-      this.getNewPiece();
+  flipfragment() {
+    if (!this.haltTet.fragment) {
+      this.haltTet.fragment = this.fragment;
+      this.fragment = this.next;
+      this.newPlay();
     } else {
-      let temp = this.piece;
-      this.piece = this.ctxHold.piece;
-      this.ctxHold.piece = temp;
+      let temp = this.fragment;
+      this.fragment = this.haltTet.fragment;
+      this.haltTet.fragment = temp;
     }
-    this.ctxHold.piece.ctx = this.ctxHold;
-    this.piece.ctx = this.ctx;
-    this.piece.beginGame();
-    this.hold = this.ctxHold.piece;
-    const { width, height } = this.ctxHold.canvas;
-    this.ctxHold.clearRect(0, 0, width, height);
-    this.ctxHold.piece.x = 0;
-    this.ctxHold.piece.y = 0;
-    this.ctxHold.piece.draw();
+    this.haltTet.fragment.contxt = this.haltTet;
+    this.fragment.contxt = this.contxt;
+    this.fragment.genesis();
+    this.halt = this.haltTet.fragment;
+    const { width, height } = this.haltTet.canvas;
+    this.haltTet.clearRect(0, 0, width, height);
+    this.haltTet.fragment.x = 0;
+    this.haltTet.fragment.y = 0;
+    this.haltTet.fragment.draw();
   }
 
-  hold() {
-    if (this.piece.swapped) return;
-    this.swapPieces();
-    this.piece.swapped = true;
-    return this.piece;
+  halt() {
+    if (this.fragment.swapped) return;
+    this.flipfragment();
+    this.fragment.swapped = true;
+    return this.fragment;
   }
 
-  getLinesClearedPoints(lines, level) {
+  getline(lines, level) {
     const lineClearPoints =
       lines === 1
         ? points.SINGLE
