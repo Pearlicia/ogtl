@@ -15,7 +15,7 @@ class GameArea {
   deleteHalt() {
     const { width, height } = this.haltTet.canvas;
     this.haltTet.clearRect(0, 0, width, height);
-    this.haltTet.piece = false;
+    this.haltTet.fragment = false;
   }
 
   startOver() {
@@ -28,7 +28,7 @@ class GameArea {
 
   newPlay() {
     const { width, height } = this.followinTet.canvas;
-    this.followin = new Piece(this.followinContxt);
+    this.followin = new Fragment(this.followinContxt);
     this.followinTet.clearRect(0, 0, width, height);
     this.followin.write();
   }
@@ -40,8 +40,8 @@ class GameArea {
 
   sink() {
     let k = steps[keys.DOWN](this.fragment);
-    if (this.approved(p)) {
-      this.fragment.advance(p);
+    if (this.approved(k)) {
+      this.fragment.advance(k);
     } else {
       this.constant();
       this.setline();
@@ -50,7 +50,7 @@ class GameArea {
         return false;
       }
       fall.game();
-      this.fragment = this.next;
+      this.fragment = this.followin;
       this.fragment.contxt = this.contxt;
       this.fragment.genesis();
       this.newPlay();
@@ -59,11 +59,11 @@ class GameArea {
   }
 
   setline() {
-    let lines = 0;
+    let l = 0;
 
     this.grid.forEach((row, y) => {
       if (row.every((value) => value > 0)) {
-        lines++;
+        l++;
 
         this.grid.splice(y, 1);
         clear.game();
@@ -71,13 +71,13 @@ class GameArea {
       }
     });
 
-    if (lines > 0) {
-      player.score += this.getline(lines);
-      player.lines += lines;
+    if (l > 0) {
+      player.score += this.getline(l);
+      player.l += l;
 
-      if (player.lines >= linesLevel) {
+      if (player.l >= linesLevel) {
         player.level++;
-        player.lines -= linesLevel;
+        player.l -= linesLevel;
         time.level = level[player.level];
       }
     }
@@ -130,16 +130,16 @@ class GameArea {
 
   spintetris(fragment, move) {
     let k = JSON.parse(JSON.stringify(fragment));
-    if (!fragment.hardDropped) {
+    if (!fragment.descent) {
       for (let y = 0; y < k.shape.length; y++)
         for (let x = 0; x < y; x++)
           [k.shape[x][y], k.shape[y][x]] = [k.shape[y][x], k.shape[x][y]];
       if (move === rotation.RIGHT) {
         k.shape.forEach((row) => row.reverse());
-        rotate.play();
+        this.spintetris.game();
       } else if (move === rotation.LEFT) {
         k.shape.reverse();
-        rotate.play();
+        this.spintetris.game();
       }
     }
     return k;
@@ -148,12 +148,12 @@ class GameArea {
   flipfragment() {
     if (!this.haltTet.fragment) {
       this.haltTet.fragment = this.fragment;
-      this.fragment = this.next;
+      this.fragment = this.followin;
       this.newPlay();
     } else {
-      let temp = this.fragment;
+      let t = this.fragment;
       this.fragment = this.haltTet.fragment;
-      this.haltTet.fragment = temp;
+      this.haltTet.fragment = t;
     }
     this.haltTet.fragment.contxt = this.haltTet;
     this.fragment.contxt = this.contxt;
@@ -163,7 +163,7 @@ class GameArea {
     this.haltTet.clearRect(0, 0, width, height);
     this.haltTet.fragment.x = 0;
     this.haltTet.fragment.y = 0;
-    this.haltTet.fragment.draw();
+    this.haltTet.fragment.sketch();
   }
 
   halt() {
@@ -173,18 +173,18 @@ class GameArea {
     return this.fragment;
   }
 
-  getline(lines, level) {
-    const lineClearPoints =
-      lines === 1
+  getline(l, level) {
+    const cleanpoint =
+      l === 1
         ? points.SINGLE
-        : lines === 2
+        : l === 2
         ? points.DOUBLE
-        : lines === 3
+        : l === 3
         ? points.TRIPLE
-        : lines === 4
+        : l === 4
         ? points.TETRIS
         : 0;
 
-    return (player.level + 1) * lineClearPoints;
+    return (player.level + 1) * cleanpoint;
   }
 }

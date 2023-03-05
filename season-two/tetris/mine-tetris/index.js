@@ -13,7 +13,7 @@ const playSound = document.querySelector('.play-sound');
 
 const columns = 10;
 const rows = 20;
-const blockSize = 30;
+const block = 30;
 const linesLevel = 10;
 const colors = [
   'none',

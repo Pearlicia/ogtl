@@ -1,16 +1,16 @@
 class Fragment {
   constructor(contxt) {
     this.contxt = contxt;
-    this.spawn();
+    this.generate();
   }
 
   generate() {
-    this.typeId = this.newTet(colors.length - 1);
-    this.shape = shapes[this.typeId];
-    this.color = colors[this.typeId];
+    this.style = this.newTet(colors.length - 1);
+    this.shape = shapes[this.style];
+    this.color = colors[this.style];
     this.x = 0;
     this.y = 0;
-    this.hardDropped = false;
+    this.descent = false;
   }
 
   sketch() {
@@ -24,24 +24,24 @@ class Fragment {
     });
   }
 
-  newTet(types) {
-    return Math.floor(Math.random() * types + 1);
+  newTet(t) {
+    return Math.floor(Math.random() * t + 1);
   }
 
   genesis() {
-    this.x = this.typeId === 4 ? 4 : 3;
+    this.x = this.style === 4 ? 4 : 3;
   }
 
-  advance(p) {
-    if (!this.hardDropped) {
-      this.x = p.x;
-      this.y = p.y;
+  advance(k) {
+    if (!this.descent) {
+      this.x = k.x;
+      this.y = k.y;
     }
-    this.shape = p.shape;
+    this.shape = k.shape;
   }
 
-  hardDrop() {
-    this.hardDropped = true;
+  dropFast() {
+    this.descent = true;
   }
 
 }
