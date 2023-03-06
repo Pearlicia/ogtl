@@ -1,8 +1,8 @@
 class GameArea {
-  constructor(contxt, followinTet, haltTet) {
+  constructor(contxt, followinContxt, haltContxt) {
     this.contxt = contxt;
-    this.followinTet = followinTet;
-    this.haltTet = haltTet;
+    this.followinContxt = followinContxt;
+    this.haltContxt = haltContxt;
     this.setUp();
   }
 
@@ -13,9 +13,9 @@ class GameArea {
   }
 
   deleteHalt() {
-    const { width, height } = this.haltTet.canvas;
-    this.haltTet.clearRect(0, 0, width, height);
-    this.haltTet.fragment = false;
+    const { width, height } = this.haltContxt.canvas;
+    this.haltContxt.clearRect(0, 0, width, height);
+    this.haltContxt.fragment = false;
   }
 
   startOver() {
@@ -27,10 +27,10 @@ class GameArea {
   }
 
   newPlay() {
-    const { width, height } = this.followinTet.canvas;
-    this.followin = new Fragment(this.followinContxt);
-    this.followinTet.clearRect(0, 0, width, height);
-    this.followin.write();
+    const { width, height } = this.followinContxt.canvas;
+    this.next = new Fragment(this.followinContxt);
+    this.followinContxt.clearRect(0, 0, width, height);
+    this.next.sketch();
   }
 
   write() {
@@ -49,7 +49,7 @@ class GameArea {
         gameover.game();
         return false;
       }
-      fall.game();
+      fall.play();
       this.fragment = this.followin;
       this.fragment.contxt = this.contxt;
       this.fragment.genesis();
@@ -146,24 +146,24 @@ class GameArea {
   }
 
   flipfragment() {
-    if (!this.haltTet.fragment) {
-      this.haltTet.fragment = this.fragment;
+    if (!this.haltContxt.fragment) {
+      this.haltContxt.fragment = this.fragment;
       this.fragment = this.followin;
       this.newPlay();
     } else {
       let t = this.fragment;
-      this.fragment = this.haltTet.fragment;
-      this.haltTet.fragment = t;
+      this.fragment = this.haltContxt.fragment;
+      this.haltContxt.fragment = t;
     }
-    this.haltTet.fragment.contxt = this.haltTet;
+    this.haltContxt.fragment.contxt = this.haltContxt;
     this.fragment.contxt = this.contxt;
     this.fragment.genesis();
-    this.halt = this.haltTet.fragment;
-    const { width, height } = this.haltTet.canvas;
-    this.haltTet.clearRect(0, 0, width, height);
-    this.haltTet.fragment.x = 0;
-    this.haltTet.fragment.y = 0;
-    this.haltTet.fragment.sketch();
+    this.halt = this.haltContxt.fragment;
+    const { width, height } = this.haltContxt.canvas;
+    this.haltContxt.clearRect(0, 0, width, height);
+    this.haltContxt.fragment.x = 0;
+    this.haltContxt.fragment.y = 0;
+    this.haltContxt.fragment.sketch();
   }
 
   halt() {

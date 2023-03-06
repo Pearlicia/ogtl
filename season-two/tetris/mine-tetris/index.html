@@ -23,7 +23,7 @@
         <p>Level: <span id="level">0</span></p>
         <p>Lines: <span id="lines">0</span></p>
       </div>
-      <button class="play" onclick="countdown(this)">Play</button>
+      <button class="play" onclick="commence(this)">Play</button>
 
       <button class="play-sound" data-playing="false" role="switch" aria-checked="false">Sound</button>
       <span id="counts"></span>
@@ -69,12 +69,12 @@
           Tetris Game Design by Alexey Pajitnov.Tetris Logo Design by Roger Dean. All Rights Reserved.
       </p>
     </div>
-    <audio src='audio/TetrisThemeMusic.ogg'></audio>
-    <script type="text/javascript" src="constants.js"></script>
+    <audio src='sound/themesound.ogg'></audio>
+    <!-- <script type="text/javascript" src="constants.js"></script> -->
     <script type="text/javascript" src="playfield.js"></script>
     <script type="text/javascript" src="tetrominos.js"></script>
     <script type="text/javascript" src="index.js"></script>
-    <script type="text/javascript" src="audio.js"></script>
+    <script type="text/javascript" src="sound.js"></script>
 
   </body>
 

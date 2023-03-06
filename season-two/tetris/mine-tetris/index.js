@@ -165,7 +165,7 @@ function keyboard(e) {
         dash.score += points.SOFT_DROP;
       }
     } else
-      fall.game();
+      fall.play();
   }
 }
 
@@ -173,7 +173,7 @@ function reset() {
   dash.score = 0;
   dash.lines = 0;
   dash.level = 0;
-  place.reset();
+  gamearea.startOver();
   duration = { start: performance.now(), elapsed: 0, level: level[dash.level] };
 }
 
@@ -185,7 +185,7 @@ function game() {
   startGame();
 
   playSound.dataset.playing = 'true';
-  addTune.game();
+  addTune.play();
   reset();
 
   if (result) {
@@ -198,7 +198,7 @@ function moveTetris(present = 0) {
   duration.elapsed = present - duration.start;
   if (duration.elapsed > duration.level) {
     duration.start = present;
-    if (!place.drop()) {
+    if (!gamearea.sink()) {
       addTune.halt();
       addTune.currentTime = 0;
       endGame();
@@ -225,7 +225,7 @@ function endGame() {
 function halt() {
   if (!result) {
     contxt.paused = true;
-    countdown();
+    commence();
   }
 
   cancelAnimationFrame(result);
@@ -239,7 +239,7 @@ function halt() {
   contxt.paused = true;
 }
 
-function countdown(e) {
+function commence(e) {
   if (result) {
     addTune.halt();
     halt();
@@ -251,8 +251,8 @@ function countdown(e) {
     }
     let timer = 3;
     document.getElementById('counts').innerHTML = timer;
-    let countTime = setInterval(countdown, 1000);
-    function countdown() {
+    let countTime = setInterval(commence, 1000);
+    function commence() {
       timer -= 1;
       document.getElementById('counts').innerHTML = timer;
       if (timer <= 0) {
@@ -262,7 +262,7 @@ function countdown(e) {
         } else {
           contxt.paused = false;
           document.getElementById("counts").innerHTML = '';
-          addTune.game();
+          addTune.play();
           moveTetris();
           return;
         }
