@@ -72,13 +72,13 @@ class GameArea {
     });
 
     if (l > 0) {
-      player.score += this.getline(l);
-      player.l += l;
+      dash.score += this.getline(l);
+      dash.l += l;
 
-      if (player.l >= linesLevel) {
-        player.level++;
-        player.l -= linesLevel;
-        time.level = level[player.level];
+      if (dash.l >= linesLevel) {
+        dash.level++;
+        dash.l -= linesLevel;
+        duration.level = level[dash.level];
       }
     }
   }
@@ -173,7 +173,7 @@ class GameArea {
     return this.fragment;
   }
 
-  getline(l, level) {
+  getline(l) {
     const cleanpoint =
       l === 1
         ? points.SINGLE
@@ -185,6 +185,6 @@ class GameArea {
         ? points.TETRIS
         : 0;
 
-    return (player.level + 1) * cleanpoint;
+      return (dash.level + 1) * cleanpoint;
   }
 }

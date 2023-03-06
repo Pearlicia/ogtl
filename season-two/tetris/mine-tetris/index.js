@@ -87,13 +87,13 @@ const level = {
 Object.freeze(points);
 Object.freeze(level);
 
-const rotation = {
+const turnTetris = {
   LEFT: 'left',
   RIGHT: 'right'
 }
-Object.freeze(rotation);
+Object.freeze(turnTetris);
 
-let playerStatus = {
+let dashboard = {
   score: 0,
   level: 0,
   lines: 0
@@ -106,7 +106,7 @@ function newGame(key, value) {
   }
 }
 
-let player = new Proxy(playerStatus, {
+let dash = new Proxy(dashboard, {
   set: (target, key, value) => {
     target[key] = value;
     newGame(key, value);
@@ -119,19 +119,19 @@ steps = {
   [keys.RIGHT]:  (k) => ({ ...k, x: k.x + 1 }),
   [keys.DOWN]:   (k) => ({ ...k, y: k.y + 1 }),
   [keys.SPACE]:  (k) => ({ ...k, y: k.y + 1 }),
-  [keys.UP]:     (k) => place.rotate(k, rotation.RIGHT),
-  [keys.Q]:      (k) => place.rotate(k, rotation.LEFT),
+  [keys.UP]:     (k) => gamearea.spintetris(k, turnTetris.RIGHT),
+  [keys.Q]:      (k) => gamearea.spintetris(k, turnTetris.LEFT),
 };
 
-let place = new Place(contxt, followinContxt, haltContxt);
+let gamearea = new GameArea(contxt, followinContxt, haltContxt);
 
 controlTetris(followinContxt);
 controlTetris(haltContxt);
 
 function controlTetris(contxt) {
-  contxt.canvas.width = 4 * blockSize;
-  contxt.canvas.height = 4 * blockSize;
-  contxt.scale(blockSize, blockSize);
+  contxt.canvas.width = 4 * block;
+  contxt.canvas.height = 4 * block;
+  contxt.scale(block, block);
 }
 
 function startGame() {
@@ -149,32 +149,32 @@ function keyboard(e) {
     addTune.currrentTime = 0;
     end.game();
     endGame();
-  } else if (moves[e.keyCode]) {
+  } else if (steps[e.keyCode]) {
     e.preventDefault();
-    let k = moves[e.keyCode](place.piece);
+    let k = steps[e.keyCode](gamearea.fragment);
     if (e.keyCode === keys.SPACE) {
-      while (place.valid(k)) {
-        player.score += points.HARD_DROP;
-        place.piece.move(k);
-        k = moves[keys.DOWN](place.piece);
+      while (gamearea.approved(k)) {
+        dash.score += points.HARD_DROP;
+        gamearea.fragment.advance(k);
+        k = steps[keys.DOWN](gamearea.fragment);
       }
-      place.piece.hardDrop();
-    } else if (place.valid(k)) {
-      place.piece.move(k);
+      gamearea.fragment.dropFast();
+    } else if (gamearea.approved(k)) {
+      gamearea.fragment.advance(k);
       if (e.keyCode === keys.DOWN) {
-        player.score += points.SOFT_DROP;
+        dash.score += points.SOFT_DROP;
       }
     } else
       fall.game();
   }
 }
 
-function resetGame() {
-  player.score = 0;
-  player.lines = 0;
-  player.level = 0;
+function reset() {
+  dash.score = 0;
+  dash.lines = 0;
+  dash.level = 0;
   place.reset();
-  duration = { start: performance.now(), elapsed: 0, level: level[player.level] };
+  duration = { start: performance.now(), elapsed: 0, level: level[dash.level] };
 }
 
 let result = null;
@@ -186,7 +186,7 @@ function game() {
 
   playSound.dataset.playing = 'true';
   addTune.game();
-  resetGame();
+  reset();
 
   if (result) {
     cancelAnimationFrame(result);
@@ -208,7 +208,7 @@ function moveTetris(present = 0) {
 
   contxt.clearRect(0, 0, contxt.canvas.width, contxt.canvas.height);
 
-  place.draw();
+  gamearea.write();
   result = requestAnimationFrame(moveTetris);
 }
 
@@ -225,7 +225,7 @@ function endGame() {
 function halt() {
   if (!result) {
     contxt.paused = true;
-    commence();
+    countdown();
   }
 
   cancelAnimationFrame(result);
@@ -239,7 +239,7 @@ function halt() {
   contxt.paused = true;
 }
 
-function commence(e) {
+function countdown(e) {
   if (result) {
     addTune.halt();
     halt();
@@ -251,8 +251,8 @@ function commence(e) {
     }
     let timer = 3;
     document.getElementById('counts').innerHTML = timer;
-    let countTime = setInterval(commence, 1000);
-    function commence() {
+    let countTime = setInterval(countdown, 1000);
+    function countdown() {
       timer -= 1;
       document.getElementById('counts').innerHTML = timer;
       if (timer <= 0) {
