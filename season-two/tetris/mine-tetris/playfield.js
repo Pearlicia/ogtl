@@ -49,7 +49,7 @@ class GameArea {
         gameover.game();
         return false;
       }
-      fall.play();
+      dropsound.play();
       this.fragment = this.followin;
       this.fragment.contxt = this.contxt;
       this.fragment.genesis();

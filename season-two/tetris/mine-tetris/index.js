@@ -147,7 +147,7 @@ function keyboard(e) {
   if (e.keyCode === keys.ESC) {
     addTune.halt();
     addTune.currrentTime = 0;
-    end.game();
+    endgame.play();
     endGame();
   } else if (steps[e.keyCode]) {
     e.preventDefault();
@@ -165,7 +165,7 @@ function keyboard(e) {
         dash.score += points.SOFT_DROP;
       }
     } else
-      fall.play();
+      dropsound.play();
   }
 }
 
