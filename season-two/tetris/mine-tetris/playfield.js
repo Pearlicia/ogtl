@@ -46,11 +46,11 @@ class GameArea {
       this.constant();
       this.setline();
       if (this.fragment.y === 0) {
-        gameover.game();
+        finish.play();
         return false;
       }
       dropsound.play();
-      this.fragment = this.followin;
+      this.fragment = this.next;
       this.fragment.contxt = this.contxt;
       this.fragment.genesis();
       this.newPlay();
@@ -134,12 +134,12 @@ class GameArea {
       for (let y = 0; y < k.shape.length; y++)
         for (let x = 0; x < y; x++)
           [k.shape[x][y], k.shape[y][x]] = [k.shape[y][x], k.shape[x][y]];
-      if (move === rotation.RIGHT) {
+      if (move === turnTetris.RIGHT) {
         k.shape.forEach((row) => row.reverse());
-        this.spintetris.game();
-      } else if (move === rotation.LEFT) {
+        this.rotate.play();
+      } else if (move === turnTetris.LEFT) {
         k.shape.reverse();
-        this.spintetris.game();
+        this.rotate.play();
       }
     }
     return k;

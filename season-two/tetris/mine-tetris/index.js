@@ -199,7 +199,7 @@ function moveTetris(present = 0) {
   if (duration.elapsed > duration.level) {
     duration.start = present;
     if (!gamearea.sink()) {
-      addTune.halt();
+      addTune.pause();
       addTune.currentTime = 0;
       endGame();
       return;
