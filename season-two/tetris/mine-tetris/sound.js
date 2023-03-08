@@ -1,5 +1,5 @@
 const restart = new Audio('./sound/restart.wav');
-const spin = new Audio('./sound/spintetrissound.wav');
+const spin = new Audio('./sound/spin.wav');
 const finish = new Audio('./sound/finish.wav');
 const endgame = new Audio('./sound/endgame.wav');
 const dropsound = new Audio('./sound/dropsound.wav');

@@ -114,6 +114,9 @@ let dash = new Proxy(dashboard, {
   }
 });
 
+let gamearea = new GameArea(contxt, followinContxt, haltContxt);
+
+
 steps = {
   [keys.LEFT]:   (k) => ({ ...k, x: k.x - 1 }),
   [keys.RIGHT]:  (k) => ({ ...k, x: k.x + 1 }),
@@ -123,7 +126,6 @@ steps = {
   [keys.Q]:      (k) => gamearea.spintetris(k, turnTetris.LEFT),
 };
 
-let gamearea = new GameArea(contxt, followinContxt, haltContxt);
 
 controlTetris(followinContxt);
 controlTetris(haltContxt);
@@ -141,11 +143,11 @@ function startGame() {
 
 function keyboard(e) {
   if (e.keyCode === keys.P) {
-    addTune.halt();
+    addTune.pause();
     halt();
   }
   if (e.keyCode === keys.ESC) {
-    addTune.halt();
+    addTune.pause();
     addTune.currrentTime = 0;
     endgame.play();
     endGame();
@@ -225,7 +227,6 @@ function endGame() {
 function halt() {
   if (!result) {
     contxt.paused = true;
-    commence();
   }
 
   cancelAnimationFrame(result);

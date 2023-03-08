@@ -66,7 +66,7 @@ class GameArea {
         l++;
 
         this.grid.splice(y, 1);
-        clear.game();
+        restart.play();
         this.grid.unshift(Array(columns).fill(0));
       }
     });
@@ -136,10 +136,10 @@ class GameArea {
           [k.shape[x][y], k.shape[y][x]] = [k.shape[y][x], k.shape[x][y]];
       if (move === turnTetris.RIGHT) {
         k.shape.forEach((row) => row.reverse());
-        this.rotate.play();
+        spin.play();
       } else if (move === turnTetris.LEFT) {
         k.shape.reverse();
-        this.rotate.play();
+        spin.play();
       }
     }
     return k;
