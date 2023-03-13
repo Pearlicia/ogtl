@@ -5,7 +5,7 @@
     <meta charset="utf8">
     <link rel="stylesheet" href="style.css">
 
-    <title>Tetris</title>
+    <title>Tetris Game</title>
   </head>
 
   <body>
@@ -14,7 +14,7 @@
     </div>
 
     <div class="container">
-      <img id="logo" src="images/tetris-logo.png">
+      <img id="logo" src="img/tetris-logo.png">
       <p></p>
       <canvas id="tetriminos" class="tetriminos"></canvas>
       <canvas id="halt" class="halt"></canvas>
@@ -32,31 +32,31 @@
     <div class="arrows">
       <h3>CONTROLS:</h3>
       <div>
-        <img src="images/up-arrow.png" alt="up arrow">
+        <img src="img/up-arrow.png" alt="up arrow">
         <p>ROTATE</p>
       </div>
       <div>
-        <img src="images/left-arrow.png" alt="left arrow">
+        <img src="img/left-arrow.png" alt="left arrow">
         <p>LEFT</p>
       </div>
       <div>
-        <img src="images/right-arrow.png" alt="right arrow">
+        <img src="img/right-arrow.png" alt="right arrow">
         <p>RIGHT</p>
       </div>
       <div>
-        <img src="images/down-arrow.png" alt="down arrow">
+        <img src="img/down-arrow.png" alt="down arrow">
         <p>DOWN</p>
       </div>
       <div>
-        <img src="images/pletter.png" alt="letter p">
+        <img src="img/pletter.png" alt="letter p">
         <button class="pause" onclick="halt(this)">Pause</button>
       </div>
       <div>
-        <img src="images/hard-drop.png" alt="hard drop">
+        <img src="img/hard-drop.png" alt="hard drop">
         <p>HARD DROP</p>
       </div>
       <div>
-        <img src="images/esckey.png" class="esc-key" alt="esc key">
+        <img src="img/esckey.png" class="esc-key" alt="esc key">
         <p class="esc-key">END GAME</p>
       </div>
     </div>
@@ -71,8 +71,8 @@
     </div>
     <audio src='sound/themesound.ogg'></audio>
     <!-- <script type="text/javascript" src="constants.js"></script> -->
-    <script type="text/javascript" src="playfield.js"></script>
-    <script type="text/javascript" src="tetrominos.js"></script>
+    <script type="text/javascript" src="controller.js"></script>
+    <script type="text/javascript" src="tetris_logic.js"></script>
     <script type="text/javascript" src="index.js"></script>
     <script type="text/javascript" src="sound.js"></script>
 
