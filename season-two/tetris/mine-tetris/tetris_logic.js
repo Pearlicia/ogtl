@@ -15,9 +15,9 @@ class Fragment {
 
   sketch() {
     this.contxt.fillStyle = this.color;
-    this.shape.forEach((row, y) => {
-      row.forEach((value, x) => {
-        if (value > 0) {
+    this.shape.forEach((r, y) => {
+      r.forEach((v, x) => {
+        if (v > 0) {
           this.contxt.fillRect(this.x + x, this.y + y, 1, 1);
         }
       });
