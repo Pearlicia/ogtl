@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf8">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Tetris Game</title>
+  </head>
+
+  <body>
+    <div class="tetris">
+      <canvas id="tetris" class="tetris-game"></canvas>
+    </div>
+
+    <div class="container">
+      <img id="logo" src="img/tetris-logo.png">
+      <p></p>
+      <canvas id="tetriminos" class="tetriminos"></canvas>
+      <canvas id="halt" class="halt"></canvas>
+      <div class="score-box">
+        <p>Score: <span id="score">0</span></p>
+        <p>Level: <span id="level">0</span></p>
+        <p>Lines: <span id="lines">0</span></p>
+      </div>
+      <button class="play" onclick="commence(this)">Play</button>
+
+      <button class="play-sound" data-playing="false" role="switch" aria-checked="false">Sound</button>
+      <span id="counts"></span>
+    </div>
+
+    <div class="arrows">
+      <h3>CONTROLS:</h3>
+      <div>
+        <img src="img/up-arrow.png" alt="up arrow">
+        <p>ROTATE</p>
+      </div>
+      <div>
+        <img src="img/left-arrow.png" alt="left arrow">
+        <p>LEFT</p>
+      </div>
+      <div>
+        <img src="img/right-arrow.png" alt="right arrow">
+        <p>RIGHT</p>
+      </div>
+      <div>
+        <img src="img/down-arrow.png" alt="down arrow">
+        <p>DOWN</p>
+      </div>
+      <div>
+        <img src="img/pletter.png" alt="letter p">
+        <button class="pause" onclick="halt(this)">Pause</button>
+      </div>
+      <div>
+        <img src="img/hard-drop.png" alt="hard drop">
+        <p>HARD DROP</p>
+      </div>
+      <div>
+        <img src="img/esckey.png" class="esc-key" alt="esc key">
+        <p class="esc-key">END GAME</p>
+      </div>
+    </div>
+
+    <div>
+      <p class="trade-mark" style="color:rgb(10, 10, 10)">
+          Tetris © 1985-2023 Tetris Holding.
+          Tetris logos, Tetris theme song and Tetriminos are trademarks of Tetris Holding.
+          The Tetris trade dress is owned by Tetris Holding. Licensed to The Tetris Company.
+          Tetris Game Design by Alexey Pajitnov.Tetris Logo Design by Roger Dean. All Rights Reserved.
+      </p>
+    </div>
+    <audio src='sound/themesound.ogg'></audio>
+    <!-- <script type="text/javascript" src="constants.js"></script> -->
+    <script type="text/javascript" src="controller.js"></script>
+    <script type="text/javascript" src="tetris_logic.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="sound.js"></script>
+
+  </body>
+
+</html>

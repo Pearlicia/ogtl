@@ -1,0 +1,35 @@
+.field{
+    margin-bottom: 1rem;
+}
+.scroll{
+    height: 100px;
+    overflow: scroll;
+}
+
+.d-block .d-block h1
+{
+    position: relative;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    margin-top: -15%;
+    font-size: 3em;
+    letter-spacing: 4px;
+    overflow: hidden;
+    background: linear-gradient(80deg,yellow, green, blue);
+    background-repeat: no-repeat;
+    background-size: 80%;
+    animation: animate 3.5s linear infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: rgba(0, 0, 0, 0);
+    background-color: rgb(59, 59, 59);
+ 
+}
+ 
+@keyframes animate {
+    0% {
+    background-position: -500%;
+    }
+    100% {
+    background-position: 500%;
+    }
+}
