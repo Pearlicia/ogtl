@@ -136,20 +136,21 @@ class MySqliteRequest
     else
       row.to_h.select { |k, _| @select_columns.include?(k) }
     end
+  end
  
-    def match_delete_conditions?(row)
-        @delete_where_conditions.all? do |condition|
-        column_name, criteria = condition
-        row[column_name] == criteria
-        end
-        end
+  def match_delete_conditions?(row)
+    @delete_where_conditions.all? do |condition|
+      column_name, criteria = condition
+      row[column_name] == criteria
+    end
+  end
         
-        def sort_rows(a, b)
-        order, column_name = @order_by
-        if order == "ASC"
-        a[column_name] <=> b[column_name]
-        else
-        b[column_name] <=> a[column_name]
-        end
-        end
-        end
+  def sort_rows(a, b)
+    order, column_name = @order_by
+    if order == "ASC"
+      a[column_name] <=> b[column_name]
+    else
+      b[column_name] <=> a[column_name]
+    end
+  end
+end
