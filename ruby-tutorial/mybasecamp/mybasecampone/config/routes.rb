@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   resources :projects
   # get 'pages/home'
   get 'login', to: 'pages#login'
