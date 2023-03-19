@@ -2,7 +2,6 @@ class ProjectsController < ApplicationController
   before_action :set_project, only: %i[ show edit update destroy ]
   before_action :authenticate_user!, except: %i[ show index ]
 
-
   # GET /projects or /projects.json
   def index
     @projects = Project.all
@@ -10,15 +9,17 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1 or /projects/1.json
   def show
+    @members = show_members
   end
-
-  # GET /projects/new
+ 
+ # GET /projects/new
   def new
     @project = Project.new
   end
 
-  # GET /projects/1/edit
+# GET /projects/1/edit
   def edit
+
   end
 
   # POST /projects or /projects.json
@@ -27,6 +28,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
+        current_user.add_role :creator, @project
         format.html { redirect_to project_url(@project), notice: "Project was successfully created." }
         format.json { render :show, status: :created, location: @project }
       else
@@ -64,10 +66,26 @@ class ProjectsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_project
       @project = Project.find(params[:id])
+
     end
 
     # Only allow a list of trusted parameters through.
     def project_params
       params.require(:project).permit(:name, :description)
     end
+
+    # Find projects that belong to them
+    def current_projects
+      Project.with_roles([:creator, :member, :member_admin], current_user)
+    end
+
+    def show_members 
+        @project = Project.find(params[:id])
+        User.with_any_role(:member, { name: :member, resource: @project }, { name: :member_admin, resource: @project })
+    end
+
+    def not_admin?
+        current_user.has_role? :member, Project.find(params[:id])
+    end
 end
+

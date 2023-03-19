@@ -1,10 +1,15 @@
-<h1>Editing project</h1>
+<div class="d-flex justify-content-center mt-5">
+  <div class="col-6 from">
+      <div class="text-center">
+          <h1>Editing project</h1>
+      </div>
 
-<%= render "form", project: @project %>
+      <%= render "form", project: @project %>
+      <%= render "members/form"%>
 
-<br>
-
-<div>
-  <%= link_to "Show this project", @project %> |
-  <%= link_to "Back to projects", projects_path %>
+      <div class="">
+          <%= link_to "Back to projects", projects_path, class: "link-dark" %>
+          <%= link_to "Show Members", "/projects/#{params[:id]}/members", class: "link-dark" %>
+      </div>
+  </div>
 </div>

@@ -3,7 +3,12 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     registrations: 'users/registrations'
   }
-  resources :projects
+  resources :projects do
+    resources :members
+  end
+
+  delete 'members/destroy' => "members#destroy"
+  post 'members/edit' => "members#edit"
   # get 'pages/home'
   get 'login', to: 'pages#login'
   # get 'pages/login'
@@ -15,3 +20,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#home"
 end
+
+
