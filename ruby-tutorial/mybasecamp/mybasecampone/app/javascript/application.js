@@ -4,3 +4,5 @@ import "controllers"
 import "font-awesome";
 
 
+import "trix"
+import "@rails/actiontext"

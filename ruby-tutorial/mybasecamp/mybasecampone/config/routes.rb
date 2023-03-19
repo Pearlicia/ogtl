@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   }
   resources :projects do
     resources :members
+    resources :discussions
   end
 
   delete 'members/destroy' => "members#destroy"

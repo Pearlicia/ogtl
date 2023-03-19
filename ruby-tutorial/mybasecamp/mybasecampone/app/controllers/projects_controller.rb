@@ -10,6 +10,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1 or /projects/1.json
   def show
     @members = show_members
+    @discussions = @project.discussions.order(created_at: :desc)
   end
  
  # GET /projects/new

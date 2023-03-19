@@ -1,6 +1,7 @@
 class Project < ApplicationRecord
-    belongs_to :user, optional: true
-    has_many :members    
+    belongs_to :user
+    has_many :members
+    has_many :discussions, dependent: :destroy    
     resourcify
     
     validates :name, presence: true, length: {minimum: 5, maximum: 50}

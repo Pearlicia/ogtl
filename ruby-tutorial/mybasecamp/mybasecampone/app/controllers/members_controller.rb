@@ -30,7 +30,7 @@ class MembersController < ApplicationController
     end
 
     def create
-        @user = User.find_by(email: post_params[:email])
+        @user = User.find_by(email: project_params[:email])
         project = Project.find(params[:project_id])
 
         return redirect_to request.referer, alert: "User with this name does not exist!" if @user.nil?
@@ -40,7 +40,7 @@ class MembersController < ApplicationController
             @user.has_role? :creator, project)
             redirect_to request.referer, alert: "User with this name already exist!"
         else
-            if post_params[:is_admin] == '1'
+            if project_params[:is_admin] == '1'
                 @user.add_role :member_admin, project
                 redirect_to project_members_path
             else
@@ -67,7 +67,7 @@ class MembersController < ApplicationController
 
     private
 
-    def post_params
+    def project_params
         params.require(:member).permit(:email, :is_admin)
     end
 
