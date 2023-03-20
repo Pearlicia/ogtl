@@ -38,7 +38,7 @@ class DiscussionsController < ApplicationController
     end
   
     def discussion_params
-      params.require(:discussion).permit(:body)
+      params.require(:discussion).permit(:body, :image, pictures: [])
     end
 end
 

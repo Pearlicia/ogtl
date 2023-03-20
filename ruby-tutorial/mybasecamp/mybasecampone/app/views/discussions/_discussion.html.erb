@@ -5,6 +5,14 @@
     <span>Edited <%= time_ago_in_words(discussion.updated_at) %> ago</span>
   <% else %>
     <span>Posted <%= time_ago_in_words(discussion.created_at) %> ago</span>
+    <%= discussion.body %>
+    <br />
+    <%= discussion.image %>
+    <hr />
+    <%= discussion.pictures.each do |picture| %>
+      <% picture %>
+    <% end %>
+
   <% end %>
   <% if current_user == discussion.user %>
     <div class="btn-group float-end">
