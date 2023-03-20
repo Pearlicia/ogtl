@@ -9,8 +9,8 @@
     <br />
     <%= discussion.image %>
     <hr />
-    <%= discussion.pictures.each do |picture| %>
-      <% picture %>
+    <% discussion.pictures.each do |picture| %>
+      <% link_to image_tag(picture), picture %>
     <% end %>
 
   <% end %>
