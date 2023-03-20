@@ -1,10 +1,11 @@
-<%= form_with(model: [project, project.discussions.build]) do |f| %>
+<%= form_with(model: [project, project.discussions.build]) do |form| %>
     <div class="form-control">
       <div class="field">
-        <%= f.label :discussion, style: "display: block" %>
-        <%= f.text_area :discussion, class: "form-control" %>
+        <%= form.label :discussion, style: "display: block" %>
+        <%= form.text_area :discussion, class: "form-control" %>
       </div>
-      <%= f.submit "Add Discussion", class: "btn btn-primary mt-1" %>
+      <%= form.rich_text_area :body %>
+      <%= form.submit "Add Discussion", class: "btn btn-primary mt-2" %>
     </div>
   <% end %>
 
