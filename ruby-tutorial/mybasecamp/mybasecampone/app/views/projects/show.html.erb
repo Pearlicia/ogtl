@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<div class="container">
+<div class="container mt-5">
   <%= render "discussions/form", project: @project %>
   <% @discussions.each do |discussion| %>
     <%= render "discussions/discussion", project: @project, discussion: discussion %>
