@@ -1,0 +1,38 @@
+<div class="d-flex align-items-center justify-content-center vh-100">
+  <div class="w-25">
+      <div class="text-center">
+        <%= image_tag 'qwasarlogo.png', size: '150x150' %>
+      </div>
+      <h2 class="text-center", class="margin-top: -10%">Log in</h2>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="form_group">
+          <%= f.label :email %> <br />
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control"%>
+          <small id="emailHelp" class="form-text text-muted">Please fill in this field.</small>
+      </div>
+
+      <div class="field" style="margin-top: 5px;">
+          <%= f.label :password %><br />
+          <%= f.password_field :password, autocomplete: "current-password", class: "form-control"%>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+          <div class="field">
+          <%= f.check_box :remember_me %>
+          <%= f.label :remember_me %>
+          </div>
+      <% end %>
+
+      <div class="text-center">
+          <div class="actions">
+          <%= f.submit "Log in",class: "btn btn-primary w-20", style: "margin-top: 20px;"%>
+          </div> <br/>
+          <span>Not a member?</span>
+
+          <%= render "devise/shared/links" %>
+      </div>
+      
+      <% end %>
+
+  </div>
+</div>

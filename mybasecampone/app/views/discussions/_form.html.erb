@@ -1,0 +1,36 @@
+<%= form_with(model: [project, project.discussions.build]) do |form| %>
+    <div class="form-control">
+      <div class="field">
+        <%= form.label :discussion, style: "display: block" %>
+        <%= form.text_area :discussion, class: "form-control" %>
+      </div>
+      <%= form.rich_text_area :body %>
+    </div>
+
+    <div>
+        <%= form.rich_text_area :body %>
+      </div>
+
+      <div>
+        <%= form.label :image %>
+        <%= form.file_field :image %>
+      </div>
+
+
+      <div>
+        <%= form.label :pictures %>
+        <%= form.file_field :pictures, multiple: true %>
+      </div>
+
+      <div>
+      <%= form.submit "Create Discussion", class: "btn btn-primary mt-2" %>
+      </div>
+  <% end %>
+
+
+
+
+
+  
+
+  

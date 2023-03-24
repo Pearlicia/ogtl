@@ -1,0 +1,42 @@
+<div class="discussion-<%= discussion.id %> container"
+    style="border: 1px solid black; padding: 1em; margin: 1em;">
+  <%= discussion.user.name %><br />
+  <% if (discussion.updated_at - discussion.created_at) > 1 %>
+    <span>Edited <%= time_ago_in_words(discussion.updated_at) %> ago</span>
+  <% else %>
+    <span>Posted <%= time_ago_in_words(discussion.created_at) %> ago</span>
+    <%= discussion.body %>
+    <br />
+    <%= discussion.image %>
+    <hr />
+    <% discussion.pictures.each do |picture| %>
+      <% link_to image_tag(picture), picture %>
+    <% end %>
+
+  <% end %>
+  <% if current_user == discussion.user %>
+    <div class="btn-group float-end">
+      <%= link_to "Edit", nil, remote: true, class:"btn btn-warning",
+      data: {
+        controller: "discussions",
+        action: "discussions#toggleForm",
+        discussions_form_param: "edit-form-#{discussion.id}",
+        discussions_body_param: "discussion-body-#{discussion.id}",
+        discussions_edit_param: "edit-button-#{discussion.id}"
+      },
+      id: "edit-button-#{discussion.id}" %>
+      <%= button_to "Delete", [project, discussion], class:"btn btn-danger", method: :delete %>
+    </div>
+    <div id="edit-form-<%= discussion.id%>" class="d-none">
+      <%= render 'discussions/form',
+       project: @project,
+       discussion: discussion,
+       submit_label: "Update" %>
+    </div>
+  <% end %>
+  <hr />
+  <div id="discussion-body-<%= discussion.id %>">
+    <%= discussion.body %>
+  </div>
+</div>
+
