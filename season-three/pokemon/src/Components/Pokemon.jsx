@@ -1,12 +1,12 @@
-/* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import { Typography, Link, CircularProgress, Button } from "@material-ui/core";
 import { toFirstCharUppercase } from "./constants";
 import axios from "axios";
+import { useParams, useNavigate } from 'react-router-dom';
 
 const Pokemon = (props) => {
-  const { match, history } = props;
-  const { params } = match;
+  const params = useParams();
+  const navigate = useNavigate();
   const { pokemonId } = params;
   const [pokemon, setPokemon] = useState(undefined);
 
@@ -28,11 +28,10 @@ const Pokemon = (props) => {
     const { front_default } = sprites;
     return (
       <>
-        <Typography variant="h1">
+        <Typography variant="h2">
           {`${id}.`} {toFirstCharUppercase(name)}
-          <img src={front_default} />
         </Typography>
-        <img style={{ width: "300px", height: "300px" }} src={fullImageUrl} />
+        <img style={{ width: "300px", height: "300px" }} src={front_default} />
         <Typography variant="h3">Pokemon Info</Typography>
         <Typography>
           {"Species: "}
@@ -57,7 +56,7 @@ const Pokemon = (props) => {
       {pokemon === false && <Typography> Pokemon not found</Typography>}
 
       {pokemon !== undefined && (
-        <Button variant="contained" onClick={() => history.push("/")}>
+        <Button variant="contained" onClick={() => navigate("/")}>
           back to pokedex
         </Button>
       )}

@@ -16,6 +16,7 @@ import { toFirstCharUppercase } from "./constants";
 import SearchIcon from "@material-ui/icons/Search";
 import axios from "axios";
 
+
 const useStyles = makeStyles((theme) => ({
   pokedexContainer: {
     paddingTop: "20px",
@@ -47,8 +48,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Pokedex = (props) => {
+  const navigate = useNavigate();
   const classes = useStyles();
-  const { navigate } = props;
   const [pokemonData, setPokemonData] = useState({});
   const [filter, setFilter] = useState("");
 
