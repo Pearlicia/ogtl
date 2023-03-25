@@ -4,11 +4,13 @@ import Tab from '@material-ui/core/Tab';
 import TabPanel from '@material-ui/lab/TabPanel';
 import TabContext from '@material-ui/lab/TabContext';
 import { toFirstCharUppercase } from "./constants";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from "axios";
 import { useParams, useNavigate } from 'react-router-dom';
 import '../App.css';
 
-const Pokemon = (props) => {
+
+const DetailsPage= (props) => {
   const params = useParams();
   const navigate = useNavigate();
   const { pokemonId } = params;
@@ -34,15 +36,15 @@ const Pokemon = (props) => {
 
   const generatePokemonJSX = (pokemon) => {
     const { name, id, species, height, weight, types, moves, stats, abilities, sprites } = pokemon;
-    const fullImageUrl = `https://pokeres.bastionbot.org/images/pokemon/${id}.png`;
     const { front_default } = sprites;
     return (
       <>
-        <Typography variant="h2">
+        <ArrowBackIcon style={{ marginLeft: "15px", marginTop: "15px" }} variant="contained" onClick={() => navigate("/")} />
+        <Typography style={{ marginLeft: "40px" }} variant="h3">
           {`${id}.`} {toFirstCharUppercase(name)}
         </Typography>
-        <img style={{ width: "300px", height: "300px" }} src={front_default} />
-        <Typography variant="h3">Pokemon Info</Typography>
+      
+        <img alt="pokemonImage" style={{ width: "300px", height: "300px" }} src={front_default} />
 
        <TabContext>
           <Box sx={{ borderBottom: 3, borderColor: 'divider' }}>
@@ -53,6 +55,7 @@ const Pokemon = (props) => {
                 <Tab label="Moves" onClick={()=>updateToggle(4)} />
               </Tabs>
           </Box>
+          <hr /> 
           <TabPanel className={toggle === 1 ? "show-content" : "content"}>
             <Typography>
               {"Species: "}
@@ -71,7 +74,8 @@ const Pokemon = (props) => {
           <TabPanel className={toggle === 2 ? "show-content" : "content"}>
               {stats.map((stat, index) => (
                 <div key={index}>
-                  <p>{stat.stat.name}: {stat.base_stat}</p>
+                  <p>{stat.stat.name}: {stat.base_stat}
+                  </p>
                 </div>
               ))}
 
@@ -105,12 +109,13 @@ const Pokemon = (props) => {
       {pokemon === false && <Typography> Pokemon not found</Typography>}
 
       {pokemon !== undefined && (
-        <Button variant="contained" onClick={() => navigate("/")}>
-          back to pokedex
+        <Button style={{ backgroundColor: "lightgreen", marginLeft: "20px" }} variant="contained" onClick={() => navigate("/")}>
+          back to home
         </Button>
       )}
-    </>
+  
+      </>
   );
 };
 
-export default Pokemon;
+export default DetailsPage;

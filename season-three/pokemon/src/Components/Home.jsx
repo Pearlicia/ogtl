@@ -42,12 +42,12 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "5px",
   },
   searchInput: {
-    width: "200px",
+    width: "400px",
     margin: "5px",
   },
 }));
 
-const Pokedex = (props) => {
+const Home = (props) => {
   const navigate = useNavigate();
   const classes = useStyles();
   const [pokemonData, setPokemonData] = useState({});
@@ -105,7 +105,7 @@ const Pokedex = (props) => {
             <TextField
               className={classes.searchInput}
               onChange={handleSearchChange}
-              label="Pokemon"
+              label="Search"
               variant="standard"
             />
           </div>
@@ -126,4 +126,4 @@ const Pokedex = (props) => {
   );
 };
 
-export default Pokedex;
+export default Home;
